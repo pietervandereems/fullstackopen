@@ -1,0 +1,17 @@
+Title: Excercise 0.4
+Participant Browser
+Participant Server
+Note over Browser: User inserts text into field and clicks submit button
+Browser->Server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note
+Note over Server: Create Object with content: req.body.note and date: new Date()
+Note over Server: Add created Object to notes array
+Server->Browser: HTTP 302 location:/notes
+
+Browser->Aerver: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
+Server-->Browser: HTML-code
+Browser->Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+Server-->Browser: main.css
+Browser->Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.js
+Server-->Browser: main.js
+Note over Browser: etc.
+
