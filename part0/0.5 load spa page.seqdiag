@@ -1,0 +1,30 @@
+Title: Excercise 0.5
+Participant Browser
+Participant Server
+
+Browser->Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa
+Server-->Browser: HTML-code
+Browser->Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa.js
+Server-->Browser: spa.js
+Browser->Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+Server-->Browser: main.css
+
+Note over Browser: onreadystatechange event function is set
+Note over Browser: Executing js-code to request data.json
+Note over Browser: After document onload event, form element is gotten and onsubmit event function is set
+
+Browser->Server: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+Server-->Browser: [{"content":"HTML is easy","date":"2019-05-23T17:30:31.098Z"},...]
+
+Note over Browser: browser executes the event handler that renders notes to display
+
+
+#Note over Browser: onreadystatechange event handler function is called
+#Note over Browser: server response is parsed and entered in to global notes variable
+#Note over Browser: redrawNotes function is called
+#Note over Browser: ul element is created
+#Note over Browser: global notes array is looped
+#Note over Browser: for each element an li is created with the content of that element and appended to the ul element as child
+#Note over Browser: element with notes id is gotten from DOM and it first child is removed if it has any children
+#Note over Browser: ul element is appended to to notes element as a child
+
