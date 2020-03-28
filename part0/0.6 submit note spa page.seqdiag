@@ -1,0 +1,14 @@
+Title: Excercise 0.5
+Participant Browser
+Participant Server
+Note over Browser: User inserts text into field and clicks submit button
+Note over Browser: Form onsubmit event handler is executed
+Note over Browser: execution of default submit action is prevented
+Note over Browser: Create Object with content: form input field value and date: new Date()
+Note over Browser: Add created Object to notes array
+Note over Browser: Clear form input field
+Note over Browser: execute code to redraw notes
+Note over Browser: execute code to send note to server
+Browser->Server: HTTP POST (application/json) stringified json of note variable
+Note over Server: Probably parse received note to an Object and add it to global notes array
+
