@@ -6,9 +6,10 @@ const Button = ({ text, onClick }) => (
 );
 
 const Statistic = ({ text, value }) => (
-  <>
-    {text} {value} <br />
-  </>
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
 )
 
 const Statistics = ({ good, neutral, bad }) => {
@@ -24,16 +25,20 @@ const Statistics = ({ good, neutral, bad }) => {
   const total = good + neutral + bad;
   const average = total ? (good - bad) / total : 0;
   const positive = total ? (good / total) * 100 : 0;
-  const positivePercentage = total ? positive.toString() + '%' : '-';
+  const positivePercentage = total ? positive.toString() + ' %' : '-';
   return (
     <section>
       <h1>statistics</h1>
-      <Statistic text="good" value={good} />
-      <Statistic text="neutral" value= {neutral} />
-      <Statistic text="bad" value= {bad} />
-      <Statistic text="all" value= {total} />
-      <Statistic text="average" value= {average} />
-      <Statistic text="positive" value= {positivePercentage} />
+      <table>
+        <tbody>
+          <Statistic text="good" value={good} />
+          <Statistic text="neutral" value={neutral} />
+          <Statistic text="bad" value={bad} />
+          <Statistic text="all" value={total} />
+          <Statistic text="average" value={average} />
+          <Statistic text="positive" value={positivePercentage} />
+        </tbody>
+      </table>
     </section>
   );
 };
