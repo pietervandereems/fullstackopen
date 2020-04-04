@@ -5,6 +5,12 @@ const Button = ({ text, onClick }) => (
   <button onClick={onClick}>{text}</button>
 );
 
+const Statistic = ({ text, value }) => (
+  <>
+    {text} {value} <br />
+  </>
+)
+
 const Statistics = ({ good, neutral, bad }) => {
 
   if (good === 0 && neutral === 0 && bad === 0) {
@@ -22,12 +28,12 @@ const Statistics = ({ good, neutral, bad }) => {
   return (
     <section>
       <h1>statistics</h1>
-      good {good} <br />
-      neutral {neutral} <br />
-      bad {bad} <br />
-      all {total} <br />
-      average {average} <br />
-      positive {positivePercentage}
+      <Statistic text="good" value={good} />
+      <Statistic text="neutral" value= {neutral} />
+      <Statistic text="bad" value= {bad} />
+      <Statistic text="all" value= {total} />
+      <Statistic text="average" value= {average} />
+      <Statistic text="positive" value= {positivePercentage} />
     </section>
   );
 };
@@ -38,7 +44,6 @@ const App = () => {
   const [bad, setBad] = useState(0);
 
   const setFeedback = (setter) => (value) => () => setter(value + 1);
-
 
   return (
     <>
