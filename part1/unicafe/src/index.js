@@ -6,10 +6,19 @@ const Button = ({ text, onClick }) => (
 );
 
 const Statistics = ({ good, neutral, bad }) => {
+
+  if (good === 0 && neutral === 0 && bad === 0) {
+    return (
+      <section>
+        <h1>statistics</h1>
+        No feedback given
+      </section>
+    );
+  }
   const total = good + neutral + bad;
   const average = total ? (good - bad) / total : 0;
   const positive = total ? (good / total) * 100 : 0;
-  const positivePercentage = positive ? positive.toString() + '%' : '-';
+  const positivePercentage = total ? positive.toString() + '%' : '-';
   return (
     <section>
       <h1>statistics</h1>
