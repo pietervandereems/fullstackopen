@@ -1,6 +1,23 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
+const DisplayAnecdote = ({ anecdote, votes }) => (
+  <>
+    {anecdote} <br />
+    has { votes} votes <br />
+  </>
+);
+
+const ShowHighest = ({ anecdotes, votes }) => {
+  const highest = votes.reduce((acc, value, index) => value > acc.value ? { value, index }: acc, { value: 0, index: 0 });
+  return (
+    <section>
+      <h1>Anecdote with most votes</h1>
+      <DisplayAnecdote anecdote={anecdotes[highest.index]} votes={highest.value} />
+    </section>
+  );
+};
+
 const App = ({ anecdotes }) => {
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
@@ -17,10 +34,11 @@ const App = ({ anecdotes }) => {
 
   return (
     <>
-      {anecdotes[selected]} <br />
-      has {votes[selected]} votes <br />
+      <h1>Anecdote of the day</h1>
+      <DisplayAnecdote anecdote={anecdotes[selected]} votes={votes[selected]} />
       <button onClick={vote}>vote</button>
       <button onClick={selectAnecdote}>next anecdote</button>
+      <ShowHighest anecdotes={anecdotes} votes={votes} />
     </>
   );
 }
