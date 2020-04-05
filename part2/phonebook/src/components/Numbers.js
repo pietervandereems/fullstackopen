@@ -1,15 +1,22 @@
 import React from 'react';
 
-const Person = ({ name }) => (
+const Person = ({ name, number }) => (
   <>
-    {name} < br />
+    <tr>
+      <td>{name}</td>
+      <td>{number}</td>
+    </tr>
   </>
 );
 
 const Numbers = ({ list }) => (
   <section>
     <h2>Numbers</h2>
-    {list.map(person => <Person key={person.name} name={person.name} />)}
+    <table>
+      <tbody>
+        {list.map(person => <Person key={person.name} name={person.name} number={person.number} />)}
+      </tbody>
+    </table>
   </section>
 );
 
