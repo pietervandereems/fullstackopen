@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import Persons from './components/Persons';
 import Filter from './components/Filter';
+import PersonForm from './components/PersonForm';
+import Persons from './components/Persons';
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -9,32 +10,21 @@ const App = () => {
     { name: 'Dan Abramov', number: '12-43-234345' },
     { name: 'Mary Poppendieck', number: '39-23-6423122' }
   ]);
-  const [newName, setNewName] = useState('');
-  const [newNumber, setNewNumber] = useState('');
   const [filter, setFilter] = useState('');
 
-  const addPerson = (event) => {
+  const addPerson = ({ newPerson, cleanInputs }) => (event) => {
     event.preventDefault();
 
-    if (persons.reduce((acc, person) => acc ? acc : person.name === newName, false)) {
-      window.alert(`${newName} is already added to the phonebook`);
+    if (persons.reduce((acc, p) => acc ? acc : p.name.toUpperCase() === newPerson.name.toUpperCase(), false)) {
+      window.alert(`${newPerson.name} is already added to the phonebook`);
       return;
     }
 
-    setPersons(persons.concat([{ name: newName, number: newNumber }]));
-    setNewName('');
-    setNewNumber('');
+    setPersons(persons.concat([{ ...newPerson }]));
+    cleanInputs();
   };
 
-  const handlePersonChange = ({ target: { value } }) => {
-    setNewName(value);
-  };
-
-  const handleNumberChange = ({ target: { value } }) => {
-    setNewNumber(value);
-  };
-
-  const personFilter = (searchTerm) => searchTerm ? 
+  const personFilter = (searchTerm) => searchTerm ?
     (person) => person.name.toUpperCase().includes(searchTerm.toUpperCase()) :
     () => true;
 
@@ -43,11 +33,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter filter={filter} setter={setFilter} />
       <h2>add a new</h2>
-      <form onSubmit={addPerson}>
-        <label>name: <input value={newName} onChange={handlePersonChange} /></label><br />
-        <label>number: <input value={newNumber} onChange={handleNumberChange} /></label><br />
-        <button type="submit">add</button>
-      </form>
+      <PersonForm addPerson={addPerson} />
       <Persons list={persons.filter(personFilter(filter))} />
     </div>
   );
