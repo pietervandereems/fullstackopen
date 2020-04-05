@@ -9,7 +9,7 @@ const Person = ({ name, number }) => (
   </>
 );
 
-const Numbers = ({ list }) => (
+const Persons = ({ list }) => (
   <section>
     <h2>Numbers</h2>
     <table>
@@ -20,4 +20,4 @@ const Numbers = ({ list }) => (
   </section>
 );
 
-export default Numbers;
+export default Persons;
