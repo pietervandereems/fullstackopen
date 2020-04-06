@@ -1,36 +1,12 @@
 import React, { useState } from 'react';
-import './country.css';
-
-const DisplayLanguage = ({ language: { name } }) => (
-  <li>
-    {name}
-  </li>
-);
-
-const DisplayCountry = ({ country }) => {
-  if (!country.name) {
-    return <></>;
-  }
-  return (
-    <section>
-      <h1>{country.name}</h1>
-    capital {country.capital} <br />
-    population {country.population}
-      <h2>languages</h2>
-      <ul>
-        {country.languages.map(language => <DisplayLanguage key={language.iso639_1} language={language} />)}
-      </ul>
-      <img src={country.flag} alt="flag" />
-    </section>
-  );
-}
+import DisplayCountry from './DisplayCountry';
+import Weather from './Weather';
 
 const DisplayCountryItem = ({ country, setSelectedCountry }) => (
   <>
     {country.name} <button onClick={setSelectedCountry}>show</button><br />
   </>
 );
-
 
 const DisplaySearchResults = ({ countries, searchTerm = '' }) => {
   const [selectedCountry, setSelectedCountry] = useState({});
@@ -61,6 +37,7 @@ const DisplaySearchResults = ({ countries, searchTerm = '' }) => {
     return (
       <>
         <DisplayCountry country={foundCountries[0]} />
+        <Weather country={foundCountries[0]} />
       </>
     )
   }
@@ -71,7 +48,8 @@ const DisplaySearchResults = ({ countries, searchTerm = '' }) => {
     <>
       {foundCountries.map(country =>
         <DisplayCountryItem key={country.name} country={country} setSelectedCountry={changeSelectedCountry(country)} />)}
-      <DisplayCountry country={selectedCountry} />
+      {selectedCountry.name ? <DisplayCountry country={selectedCountry} /> : ''}
+      {selectedCountry.capital ? <Weather country={selectedCountry} /> : ''}
     </>
   );
 };
