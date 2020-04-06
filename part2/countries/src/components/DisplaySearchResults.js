@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './country.css';
 
 const DisplayLanguage = ({ language: { name } }) => (
@@ -7,27 +7,34 @@ const DisplayLanguage = ({ language: { name } }) => (
   </li>
 );
 
-const DisplayCountry = ({ country }) => (
-  <section>
-    <h1>{country.name}</h1>
+const DisplayCountry = ({ country }) => {
+  if (!country.name) {
+    return <></>;
+  }
+  return (
+    <section>
+      <h1>{country.name}</h1>
     capital {country.capital} <br />
     population {country.population}
-    <h2>languages</h2>
-    <ul>
-      {country.languages.map(language => <DisplayLanguage key={language.iso639_1} language={language} />)}
-    </ul>
-    <img src={country.flag} alt="flag" />
-  </section>
-);
+      <h2>languages</h2>
+      <ul>
+        {country.languages.map(language => <DisplayLanguage key={language.iso639_1} language={language} />)}
+      </ul>
+      <img src={country.flag} alt="flag" />
+    </section>
+  );
+}
 
-const DisplayCountryItem = ({ country }) => (
+const DisplayCountryItem = ({ country, setSelectedCountry }) => (
   <>
-    {country.name} <br />
+    {country.name} <button onClick={setSelectedCountry}>show</button><br />
   </>
 );
 
 
 const DisplaySearchResults = ({ countries, searchTerm = '' }) => {
+  const [selectedCountry, setSelectedCountry] = useState({});
+
   if (searchTerm === '') {
     return <></>;
   }
@@ -58,9 +65,13 @@ const DisplaySearchResults = ({ countries, searchTerm = '' }) => {
     )
   }
 
+  const changeSelectedCountry = (country) => () => setSelectedCountry(country);
+
   return (
     <>
-      {foundCountries.map(country => <DisplayCountryItem key={country.name} country={country} />)}
+      {foundCountries.map(country =>
+        <DisplayCountryItem key={country.name} country={country} setSelectedCountry={changeSelectedCountry(country)} />)}
+      <DisplayCountry country={selectedCountry} />
     </>
   );
 };
