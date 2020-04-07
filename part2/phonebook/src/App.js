@@ -43,7 +43,7 @@ const App = () => {
       <Filter filter={filter} setter={setFilter} />
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} />
-      <Persons list={persons.filter(personFilter(filter))} />
+      <Persons list={persons.filter(personFilter(filter))}  setPersons={setPersons} />
     </div>
   );
 };
