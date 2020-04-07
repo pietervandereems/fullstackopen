@@ -20,8 +20,15 @@ const App = () => {
   const addPerson = ({ newPerson, cleanInputs }) => (event) => {
     event.preventDefault();
 
-    if (persons.reduce((acc, p) => acc ? acc : p.name.toUpperCase() === newPerson.name.toUpperCase(), false)) {
-      window.alert(`${newPerson.name} is already added to the phonebook`);
+    const preExistingPerson = persons.filter(p => p.name.toUpperCase() === newPerson.name.toUpperCase());
+    if (preExistingPerson.length > 0) {
+      if (window.confirm(`${newPerson.name} is already added to the phonebook, replace the old number with a new one?`)) {
+        personService
+          .update({ ...preExistingPerson[0], number: newPerson.number })
+          .then(updatedPerson =>
+            setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person))
+          );
+      }
       return;
     }
 
@@ -43,7 +50,7 @@ const App = () => {
       <Filter filter={filter} setter={setFilter} />
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} />
-      <Persons list={persons.filter(personFilter(filter))}  setPersons={setPersons} />
+      <Persons list={persons.filter(personFilter(filter))} setPersons={setPersons} />
     </div>
   );
 };
