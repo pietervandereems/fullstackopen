@@ -1,12 +1,11 @@
 import React from 'react';
 
-const Notification = ({ notification }) => {
-  if (!notification) {
+const Notification = ({ notification: { txt, isError } }) => {
+  if (!txt) {
     return null;
   }
 
-  const errorStyle = {
-    color: 'darkgreen',
+  const defaultStyle = {
     background: 'lightgrey',
     fontSize: 20,
     borderStyle: 'solid',
@@ -15,9 +14,19 @@ const Notification = ({ notification }) => {
     marginBottom: 10
   };
 
+  const errorStyle = {
+    ...defaultStyle,
+    color: 'red',
+  };
+
+  const noteStyle = {
+    ...defaultStyle,
+    color: 'darkgreen'
+  };
+
   return (
-    <div style={errorStyle}>
-      {notification}
+    <div style={isError ? errorStyle : noteStyle}>
+      {txt}
     </div>
   );
 

@@ -18,9 +18,9 @@ const App = () => {
 
   }, []);
 
-  const sendNotification = (msg) => {
-    setNotification(msg);
-    setTimeout(() => setNotification(), 5000);
+  const sendNotification = (note = { txt: '', isError: false }) => {
+    setNotification(note);
+    setTimeout(() => setNotification({ txt: '' }), 5000);
   };
 
   const addPerson = ({ newPerson, cleanInputs }) => (event) => {
@@ -33,7 +33,10 @@ const App = () => {
           .update({ ...preExistingPerson[0], number: newPerson.number })
           .then(updatedPerson => {
             setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person));
-            sendNotification(`Changed ${updatedPerson.name}`);
+            sendNotification({ txt: `Changed ${updatedPerson.name}` });
+          })
+          .catch(err => {
+            sendNotification({ txt: `Could not update ${newPerson.name}`, isError: true });
           });
       }
       return;
@@ -43,10 +46,28 @@ const App = () => {
       .create(newPerson)
       .then(createdPerson => {
         setPersons(persons.concat([createdPerson]));
-        sendNotification(`Added ${createdPerson.name}`);
-      });
+        sendNotification({ txt: `Added ${createdPerson.name}` });
+      }).catch(err => {
+        sendNotification({ txt: `Could not create ${newPerson.name}`, isError: true });
+      });;
     cleanInputs();
   };
+
+
+  const removePerson = ({ name, id }) => () => {
+    if (window.confirm(`Delete ${name} ?`)) {
+      personService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter(({ id: personId }) => personId !== id));
+          sendNotification({ txt: `Deleted ${name}` });
+        })
+        .catch(err => {
+          sendNotification({ txt: `Could not delete ${name}`, isError: true });
+        });
+    }
+  };
+
 
   const personFilter = (searchTerm) => searchTerm ?
     (person) => person.name.toUpperCase().includes(searchTerm.toUpperCase()) :
@@ -59,7 +80,7 @@ const App = () => {
       <Filter filter={filter} setter={setFilter} />
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} />
-      <Persons list={persons.filter(personFilter(filter))} setPersons={setPersons} />
+      <Persons list={persons.filter(personFilter(filter))} removePerson={removePerson} />
     </div>
   );
 };
