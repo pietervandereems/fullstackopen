@@ -3,10 +3,12 @@ import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 import personService from './services/personService';
+import Notification from './components/Notification';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [filter, setFilter] = useState('');
+  const [notification, setNotification] = useState('');
 
   useEffect(() => {
     const eventHandler = response => setPersons([...response]);
@@ -16,6 +18,10 @@ const App = () => {
 
   }, []);
 
+  const sendNotification = (msg) => {
+    setNotification(msg);
+    setTimeout(() => setNotification(), 5000);
+  };
 
   const addPerson = ({ newPerson, cleanInputs }) => (event) => {
     event.preventDefault();
@@ -25,18 +31,20 @@ const App = () => {
       if (window.confirm(`${newPerson.name} is already added to the phonebook, replace the old number with a new one?`)) {
         personService
           .update({ ...preExistingPerson[0], number: newPerson.number })
-          .then(updatedPerson =>
-            setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person))
-          );
+          .then(updatedPerson => {
+            setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person));
+            sendNotification(`Changed ${updatedPerson.name}`);
+          });
       }
       return;
     }
 
     personService
       .create(newPerson)
-      .then(createdPerson =>
-        setPersons(persons.concat([createdPerson]))
-      );
+      .then(createdPerson => {
+        setPersons(persons.concat([createdPerson]));
+        sendNotification(`Added ${createdPerson.name}`);
+      });
     cleanInputs();
   };
 
@@ -47,6 +55,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification notification={notification} />
       <Filter filter={filter} setter={setFilter} />
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} />
