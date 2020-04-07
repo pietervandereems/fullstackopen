@@ -2,17 +2,16 @@ import React, { useState, useEffect } from 'react';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
-import axios from 'axios';
+import personService from './services/personService';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    const eventHandler = response => setPersons([...response.data]);
+    const eventHandler = response => setPersons([...response]);
 
-    axios
-      .get('http://localhost:3001/persons')
+    personService.getAll()
       .then(eventHandler);
 
   }, []);
@@ -26,7 +25,11 @@ const App = () => {
       return;
     }
 
-    setPersons(persons.concat([{ ...newPerson }]));
+    personService
+      .create(newPerson)
+      .then(createdPerson =>
+        setPersons(persons.concat([createdPerson]))
+      );
     cleanInputs();
   };
 
