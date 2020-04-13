@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Notification = ({ notification: { txt, isError } }) => {
+const Notification = ({ notification: { txt, full, isError } }) => {
   if (!txt) {
     return null;
   }
@@ -27,6 +27,7 @@ const Notification = ({ notification: { txt, isError } }) => {
   return (
     <div style={isError ? errorStyle : noteStyle}>
       {txt}
+      {full ? <p>{full}</p> : null}
     </div>
   );
 

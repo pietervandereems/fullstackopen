@@ -18,9 +18,9 @@ const App = () => {
 
   }, []);
 
-  const sendNotification = (note = { txt: '', isError: false }) => {
+  const sendNotification = (note = { txt: '', full: '', isError: false }) => {
     setNotification(note);
-    setTimeout(() => setNotification({ txt: '' }), 5000);
+    setTimeout(() => setNotification({ txt: '' }), note.full ? 10000 : 5000);
   };
 
   const addPerson = ({ newPerson, cleanInputs }) => (event) => {
@@ -36,7 +36,12 @@ const App = () => {
             sendNotification({ txt: `Changed ${updatedPerson.name}` });
           })
           .catch(err => {
-            sendNotification({ txt: `Could not update ${newPerson.name}`, isError: true });
+            console.error('Error Creating Person', err);
+            sendNotification({
+              txt: `Could not update ${newPerson.name}`,
+              full: err.response.data.error,
+              isError: true
+            });
           });
       }
       return;
@@ -48,7 +53,12 @@ const App = () => {
         setPersons(persons.concat([createdPerson]));
         sendNotification({ txt: `Added ${createdPerson.name}` });
       }).catch(err => {
-        sendNotification({ txt: `Could not create ${newPerson.name}`, isError: true });
+        console.error('Error Creating Person', err);
+        sendNotification({
+          txt: `Could not create ${newPerson.name}`,
+          full: err.response.data.error,
+          isError: true
+        });
       });;
     cleanInputs();
   };
@@ -63,7 +73,12 @@ const App = () => {
           sendNotification({ txt: `Deleted ${name}` });
         })
         .catch(err => {
-          sendNotification({ txt: `Could not delete ${name}`, isError: true });
+          console.error('Error Creating Person', err);
+          sendNotification({
+            txt: `Could not delete ${name}`,
+            full: err.response.data,
+            isError: true
+          });
         });
     }
   };
