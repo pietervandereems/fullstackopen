@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Notification = ({ notification: { txt, full, isError } }) => {
   if (!txt) {
@@ -31,6 +32,14 @@ const Notification = ({ notification: { txt, full, isError } }) => {
     </div>
   );
 
+};
+
+Notification.propTypes = {
+  notification: {
+    txt: PropTypes.string,
+    full: PropTypes.string,
+    isError: PropTypes.bool
+  }
 };
 
 export default Notification;

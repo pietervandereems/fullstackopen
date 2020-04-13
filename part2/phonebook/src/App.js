@@ -59,7 +59,7 @@ const App = () => {
           full: err.response.data.error,
           isError: true
         });
-      });;
+      });
     cleanInputs();
   };
 
@@ -92,7 +92,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Notification notification={notification} />
-      <Filter filter={filter} setter={setFilter} />
+      <Filter setter={setFilter} />
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} />
       <Persons list={persons.filter(personFilter(filter))} removePerson={removePerson} />

@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const Person = ({ person: { id, name, number }, removePerson }) => {
+const Person = ({ person: { name, number }, removePerson }) => {
 
   return (
     <>
@@ -26,5 +27,19 @@ const Persons = ({ list = [], removePerson }) => {
     </section>
   );
 };
+
+Person.propTypes = {
+  person: {
+    name: PropTypes.string.isRequired,
+    number: PropTypes.string.isRequired
+  },
+  removePerson: PropTypes.func
+};
+
+Persons.propTypes = {
+  list: PropTypes.array,
+  removePerson: PropTypes.func
+};
+
 
 export default Persons;

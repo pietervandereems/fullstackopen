@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const Filter = ({ filter, setter }) => {
+const Filter = ({ setter }) => {
   const handleFilterChange = ({ target: { value } }) => setter(value);
 
   return (
@@ -8,6 +9,10 @@ const Filter = ({ filter, setter }) => {
       <label>filter shown with <input onChange={handleFilterChange} /></label>
     </section>
   );
+};
+
+Filter.propTypes = {
+  setter: PropTypes.func
 };
 
 export default Filter;

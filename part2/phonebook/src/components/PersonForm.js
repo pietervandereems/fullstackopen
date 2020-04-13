@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+
 
 const PersonForm = ({ addPerson }) => {
   const [newPerson, setPerson] = useState({ name: '', number: '' });
@@ -19,7 +21,7 @@ const PersonForm = ({ addPerson }) => {
 
   const cleanInputs = () => {
     setPerson({ name: '', number: '' });
-  }
+  };
 
   return (
     <form onSubmit={addPerson({ newPerson, cleanInputs })}>
@@ -28,6 +30,10 @@ const PersonForm = ({ addPerson }) => {
       <button type="submit">add</button>
     </form>
   );
+};
+
+PersonForm.propTypes = {
+  addPerson: PropTypes.func
 };
 
 export default PersonForm;
