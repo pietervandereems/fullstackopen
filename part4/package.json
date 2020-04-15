@@ -4,10 +4,10 @@
   "description": "fullstackopen course part4 Blog List",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "jest --verbose"
   },
   "keywords": [
     "NodeJS",
@@ -17,6 +17,7 @@
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "eslint": "^6.8.0",
+    "jest": "^25.3.0",
     "nodemon": "^2.0.3"
   },
   "dependencies": {
