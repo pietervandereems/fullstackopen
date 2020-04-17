@@ -69,8 +69,14 @@ const blogListFavorite = {
   __v: 0
 };
 
+const blogListMostBlogs = {
+  author: 'Robert C. Martin',
+  blogs: 3
+};
+
 module.exports = {
   listWithOneBlog,
   blogsList,
-  blogListFavorite
+  blogListFavorite,
+  blogListMostBlogs
 };
