@@ -1,5 +1,11 @@
 const listHelper = require('../utils/list_helper');
-const { listWithOneBlog, blogsList, blogListFavorite, blogListMostBlogs } = require('./testdata');
+const {
+  listWithOneBlog,
+  blogsList,
+  blogListFavorite,
+  blogListMostBlogs,
+  blogListMostLiked
+} = require('./testdata');
 
 describe('dummy', () => {
   test('dummy returns one', () => {
@@ -35,5 +41,11 @@ describe('most blogs', () => {
   test('show who has the most blogs and how many', () => {
     const result = listHelper.mostBlogs(blogsList);
     expect(result).toEqual(blogListMostBlogs);
+  });
+});
+describe('most likes', () => {
+  test('show who has the most likes and how many', () => {
+    const result = listHelper.mostLikes(blogsList);
+    expect(result).toEqual(blogListMostLiked);
   });
 });

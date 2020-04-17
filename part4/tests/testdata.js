@@ -74,9 +74,16 @@ const blogListMostBlogs = {
   blogs: 3
 };
 
+const blogListMostLiked = {
+  author: 'Edsger W. Dijkstra',
+  likes: 17
+};
+
+
 module.exports = {
   listWithOneBlog,
   blogsList,
   blogListFavorite,
-  blogListMostBlogs
+  blogListMostBlogs,
+  blogListMostLiked
 };
