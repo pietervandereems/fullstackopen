@@ -8,7 +8,13 @@ const error = (...params) => {
   console.error(...params);
 };
 
+const fpLog = (text) => (param) => {
+  console.log(text, param);
+  return param;
+};
+
 module.exports = {
   info,
-  error
+  error,
+  fpLog
 };
