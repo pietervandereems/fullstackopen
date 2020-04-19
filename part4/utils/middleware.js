@@ -27,6 +27,8 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).send({ error: error.message });
   case 'TokenError':
     return response.status(401).send({ error: error.message });
+  case 'UnauthorizedUser':
+    return response.status(403).send({ error: error.message });
   }
 
   next(error);

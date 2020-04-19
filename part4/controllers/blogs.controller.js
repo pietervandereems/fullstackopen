@@ -4,12 +4,19 @@ const User = require('../models/user.model');
 const jwt = require('jsonwebtoken');
 const { SECRET } = require('../utils/config');
 
-// const getTokenFrom = authorization => {
-//   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-//     return authorization.substring(7);
-//   }
-//   return null;
-// };
+const decodeToken = (token) => {
+  const decodedToken = token ? jwt.verify(token, SECRET) : null;
+  if (!token || !decodedToken.id) {
+    return {
+      valid: false,
+      error: {
+        name: 'TokenError',
+        message: 'token missing or invalid'
+      }
+    };
+  }
+  return { valid: true, ...decodedToken };
+};
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
@@ -34,12 +41,9 @@ blogsRouter.get('/:id', async ({ params: { id } }, response) => {
 });
 
 blogsRouter.post('/', async ({ body, token }, response, next) => {
-  const decodedToken = token ? jwt.verify(token, SECRET) : null;
-  if (!token || !decodedToken.id) {
-    return next({
-      name: 'TokenError',
-      message: 'token missing or invalid'
-    });
+  const decodedToken = decodeToken(token);
+  if (!decodedToken.valid) {
+    return next(decodedToken.error);
   }
 
   const user = await User.findById(decodedToken.id);
@@ -60,7 +64,30 @@ blogsRouter.put('/:id', async ({ params: { id }, body }, response) => {
   response.json(updatedBlog.toJSON());
 });
 
-blogsRouter.delete('/:id', async ({ params: { id } }, response) => {
+blogsRouter.delete('/:id', async ({ params: { id }, token }, response, next) => {
+  const decodedToken = decodeToken(token);
+  if (!decodedToken.valid) {
+    return next(decodedToken.error);
+  }
+
+  const blogToDelete = await Blog.findById(id);
+  if (!blogToDelete.user) {
+    return response.status(204).end();
+  }
+  if (blogToDelete.user.toString() !== decodedToken.id.toString()) {
+    return next({
+      name: 'UnauthorizedUser',
+      message: `User is not authorized to delete blog ${id}`
+    });
+  }
+
+  const user = (await User.findById(decodedToken.id)).toJSON();
+  const updatedUser = {
+    ...user,
+    blogs: user.blogs.filter(blogId => blogId.toString() !== id)
+  };
+  await User.findByIdAndUpdate(decodedToken.id, updatedUser);
+
   await Blog.findByIdAndRemove(id);
   response.status(204).end();
 });
