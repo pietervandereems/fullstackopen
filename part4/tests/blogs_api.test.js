@@ -133,9 +133,52 @@ describe('blogs api', () => {
         blogsList.length - 1
       );
 
-      expect(blogsAfter).not.toContain(blogToDelete.content);
+      expect(blogsAfter).not.toContainEqual(blogToDelete);
+    });
+
+    test('fails with statuscode 400 if id is invalid', async () => {
+      const initialBlogs = await blogsInDB();
+      const blogToDelete = initialBlogs[0];
+
+      await api
+        .delete(`/api/blogs/${blogToDelete.id - 999}`)
+        .expect(400);
     });
   });
+
+  describe('update of a blog', () => {
+    test('succeeds with statuscode 200 and blog is updated', async () => {
+      const initialBlogs = await blogsInDB();
+
+      const blogToUpdate = {
+        ...initialBlogs[0],
+        likes: initialBlogs[0].likes + 100
+      };
+
+      const updateResult = await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .send(blogToUpdate)
+        .set('Accept', 'application/json')
+        .expect(200)
+        .expect('Content-Type', /application\/json/);
+
+      expect(updateResult.body).toEqual(blogToUpdate);
+
+      const blogsAfter = await blogsInDB();
+      expect(blogsAfter).toHaveLength(blogsList.length);
+      expect(blogsAfter).toContainEqual(blogToUpdate);
+    });
+
+    test('fails with statuscode 400 if id is invalid', async () => {
+      const initialBlogs = await blogsInDB();
+      const blogToDelete = initialBlogs[0];
+
+      await api
+        .put(`/api/blogs/${blogToDelete.id - 999}`)
+        .expect(400);
+    });
+  });
+
 });
 
 
