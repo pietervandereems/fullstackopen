@@ -4,12 +4,12 @@ const User = require('../models/user.model');
 const jwt = require('jsonwebtoken');
 const { SECRET } = require('../utils/config');
 
-const getTokenFrom = authorization => {
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7);
-  }
-  return null;
-};
+// const getTokenFrom = authorization => {
+//   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+//     return authorization.substring(7);
+//   }
+//   return null;
+// };
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
@@ -33,9 +33,7 @@ blogsRouter.get('/:id', async ({ params: { id } }, response) => {
   response.status(404).end();
 });
 
-blogsRouter.post('/', async ({ body, authorization }, response, next) => {
-  const token = getTokenFrom(authorization);
-
+blogsRouter.post('/', async ({ body, token }, response, next) => {
   const decodedToken = token ? jwt.verify(token, SECRET) : null;
   if (!token || !decodedToken.id) {
     return next({
@@ -44,14 +42,14 @@ blogsRouter.post('/', async ({ body, authorization }, response, next) => {
     });
   }
 
-  const user = (await User.findById(decodedToken.id)).toJSON();
+  const user = await User.findById(decodedToken.id);
   const blog = new Blog({
     ...body,
-    user: user.id,
+    user: user.toJSON().id,
   });
 
   const savedBlog = await blog.save();
-  user.blogs = user.notes.concat(savedBlog._id);
+  user.blogs = user.blogs.concat(savedBlog._id);
   await user.save();
 
   response.status(201).json(savedBlog.toJSON());
