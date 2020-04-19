@@ -21,87 +21,124 @@ beforeEach(async () => {
     .map(blog => new Blog(blog))
     .map(blog => blog.save());
 
-  Promise.all(saveArray);
+  await Promise.all(saveArray);
 });
 
 describe('blogs api', () => {
 
-  test('get all blogs', async () => {
+  test('blogs are returned as json', async () => {
+    await api
+      .get('/api/blogs')
+      .set('Accept', 'application/json')
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+  });
+
+  test('all blogs are returned', async () => {
     const blogs = await api
       .get('/api/blogs')
+      .set('Accept', 'application/json')
       .expect(200)
       .expect('Content-Type', /application\/json/);
 
     expect(blogs.body).toHaveLength(blogsList.length);
   });
 
-  test('add a new blog', async () => {
-    const blog = { ...ericBlog };
+  test('a specific blog is returned when requested by id', async () => {
+    const allBlogs = await blogsInDB();
+    const blog = allBlogs[0];
 
-    const savedBlog = await api
-      .post('/api/blogs')
-      .send(blog)
+    const requestedBlog = await api
+      .get(`/api/blogs/${blog.id}`)
       .set('Accept', 'application/json')
-      .expect(201)
+      .expect(200)
       .expect('Content-Type', /application\/json/);
 
-    const blogs = await blogsInDB();
-    expect(blogs).toHaveLength(blogsList.length + 1);
-
-    const newBlog = await getBlogById(savedBlog.body.id);
-    expect(savedBlog.body).toEqual(newBlog);
+    expect(requestedBlog.body).toEqual(blog);
   });
 
-  test('add a new blog without likes', async () => {
-    const blog = { ...ericBlog };
-    delete blog.likes;
+  describe(('adding a new blog'), () => {
 
-    const savedBlog = await api
-      .post('/api/blogs')
-      .send(blog)
-      .set('Accept', 'application/json')
-      .expect(201)
-      .expect('Content-Type', /application\/json/);
+    test('succeeds with valid data', async () => {
+      const blog = { ...ericBlog };
 
-    const blogs = await blogsInDB();
-    expect(blogs).toHaveLength(blogsList.length + 1);
+      const savedBlog = await api
+        .post('/api/blogs')
+        .send(blog)
+        .set('Accept', 'application/json')
+        .expect(201)
+        .expect('Content-Type', /application\/json/);
 
-    const newBlog = await getBlogById(savedBlog.body.id);
-    expect(savedBlog.body).toEqual(newBlog);
-    expect(newBlog.likes).toBeDefined();
-    expect(newBlog.likes).toBe(0);
+      const blogs = await blogsInDB();
+      expect(blogs).toHaveLength(blogsList.length + 1);
+
+      const newBlog = await getBlogById(savedBlog.body.id);
+      expect(savedBlog.body).toEqual(newBlog);
+    });
+
+    test('succeeds without likes, defaults likes to 0', async () => {
+      const blog = { ...ericBlog };
+      delete blog.likes;
+
+      const savedBlog = await api
+        .post('/api/blogs')
+        .send(blog)
+        .set('Accept', 'application/json')
+        .expect(201)
+        .expect('Content-Type', /application\/json/);
+
+      const blogs = await blogsInDB();
+      expect(blogs).toHaveLength(blogsList.length + 1);
+
+      const newBlog = await getBlogById(savedBlog.body.id);
+      expect(savedBlog.body).toEqual(newBlog);
+      expect(newBlog.likes).toBeDefined();
+      expect(newBlog.likes).toBe(0);
+    });
+
+    test('fails with statuscode 400 if data without title', async () => {
+      const blog = { ...ericBlog };
+      delete blog.title;
+
+      await api
+        .post('/api/blogs')
+        .send(blog)
+        .expect(400);
+    });
+
+    test('fails with statuscode 400 if data without url', async () => {
+      const blog = { ...ericBlog };
+      delete blog.url;
+
+      await api
+        .post('/api/blogs')
+        .send(blog)
+        .expect(400);
+    });
   });
 
-  test('add a blog without title', async () => {
-    const blog = { ...ericBlog };
-    delete blog.title;
+  describe('deletion of a blog', () => {
+    test('succeeds with status code 204 if id is valid', async () => {
+      const initialBlogs = await blogsInDB();
 
-    await api
-      .post('/api/blogs')
-      .send(blog)
-      .set('Accept', 'application/json')
-      .expect(400)
-      .expect('Content-Type', /application\/json/);
-  });
+      const blogToDelete = initialBlogs[0];
 
-  test('add a blog without url', async () => {
-    const blog = { ...ericBlog };
-    delete blog.url;
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .expect(204);
 
-    await api
-      .post('/api/blogs')
-      .send(blog)
-      .set('Accept', 'application/json')
-      .expect(400)
-      .expect('Content-Type', /application\/json/);
+      const blogsAfter = await blogsInDB();
+
+      expect(blogsAfter).toHaveLength(
+        blogsList.length - 1
+      );
+
+      expect(blogsAfter).not.toContain(blogToDelete.content);
+    });
   });
 });
 
 
 afterAll(() => {
-  try {
-    setTimeout(() => mongoose.connection.close(), 500);
-  } catch (err) {
-    console.error('mongoose connection close error');
-  }
+  mongoose.connection.close();
 });
