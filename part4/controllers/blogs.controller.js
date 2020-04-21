@@ -4,20 +4,6 @@ const User = require('../models/user.model');
 const jwt = require('jsonwebtoken');
 const { SECRET } = require('../utils/config');
 
-const decodeToken = (token) => {
-  const decodedToken = token ? jwt.verify(token, SECRET) : null;
-  if (!token || !decodedToken.id) {
-    return {
-      valid: false,
-      error: {
-        name: 'TokenError',
-        message: 'token missing or invalid'
-      }
-    };
-  }
-  return { valid: true, ...decodedToken };
-};
-
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
     .find({})
@@ -40,12 +26,8 @@ blogsRouter.get('/:id', async ({ params: { id } }, response) => {
   response.status(404).end();
 });
 
-blogsRouter.post('/', async ({ body, token }, response, next) => {
-  const decodedToken = decodeToken(token);
-  if (!decodedToken.valid) {
-    return next(decodedToken.error);
-  }
-
+blogsRouter.post('/', async ({ body, token }, response) => {
+  const decodedToken = jwt.verify(token, SECRET);
   const user = await User.findById(decodedToken.id);
   const blog = new Blog({
     ...body,
@@ -59,26 +41,34 @@ blogsRouter.post('/', async ({ body, token }, response, next) => {
   response.status(201).json(savedBlog.toJSON());
 });
 
-blogsRouter.put('/:id', async ({ params: { id }, body }, response) => {
-  const updatedBlog = await Blog.findByIdAndUpdate(id, body, { new: true });
-  response.json(updatedBlog.toJSON());
+blogsRouter.put('/:id', async ({ params: { id }, body, token }, response) => {
+  const decodedToken = jwt.verify(token, SECRET);
+  const oldBlog = (await Blog.findById(id)).toJSON();
+
+  if (oldBlog.user.toString() === decodedToken.id) {
+    const updatedBlog = await Blog.findByIdAndUpdate(id, body, { new: true });
+    response.json(updatedBlog.toJSON());
+  }
+  throw {
+    name: 'UnauthorizedUser',
+    message: `User is not authorized to update blog ${id}`
+  };
+
 });
 
-blogsRouter.delete('/:id', async ({ params: { id }, token }, response, next) => {
-  const decodedToken = decodeToken(token);
-  if (!decodedToken.valid) {
-    return next(decodedToken.error);
-  }
+blogsRouter.delete('/:id', async ({ params: { id }, token }, response) => {
+  const decodedToken = jwt.verify(token, SECRET);
 
   const blogToDelete = await Blog.findById(id);
   if (!blogToDelete.user) {
     return response.status(204).end();
   }
+
   if (blogToDelete.user.toString() !== decodedToken.id.toString()) {
-    return next({
+    throw {
       name: 'UnauthorizedUser',
       message: `User is not authorized to delete blog ${id}`
-    });
+    };
   }
 
   const user = (await User.findById(decodedToken.id)).toJSON();
