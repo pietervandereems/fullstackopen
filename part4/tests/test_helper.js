@@ -3,12 +3,15 @@ const User = require('../models/user.model');
 
 const getBlogById = async (id) => {
   const blog = await Blog.find({ _id: id });
-  return blog[0].toJSON();
+  return {
+    ...blog[0].toJSON(),
+    user: blog[0].user.toString()
+  };
 };
 
 const blogsInDB = async () => {
   const blogs = await Blog.find({});
-  return blogs.map(blog => blog.toJSON());
+  return blogs.map(blog => ({ ...blog.toJSON(), user: blog.user.toString() }));
 };
 
 const usersInDB = async () => {

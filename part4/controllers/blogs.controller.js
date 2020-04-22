@@ -42,13 +42,15 @@ blogsRouter.post('/', async ({ body, token }, response) => {
 });
 
 blogsRouter.put('/:id', async ({ params: { id }, body, token }, response) => {
+
   const decodedToken = jwt.verify(token, SECRET);
-  const oldBlog = (await Blog.findById(id)).toJSON();
+  const oldBlog = (await Blog.findById(id));
 
   if (oldBlog.user.toString() === decodedToken.id) {
     const updatedBlog = await Blog.findByIdAndUpdate(id, body, { new: true });
-    response.json(updatedBlog.toJSON());
+    return response.json(updatedBlog.toJSON());
   }
+
   throw {
     name: 'UnauthorizedUser',
     message: `User is not authorized to update blog ${id}`
