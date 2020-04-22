@@ -9,13 +9,14 @@ const listWithOneBlog = [
   }
 ];
 
-const blogsList = [
+const createBlogList = (user) => [].concat([
   {
     _id: '5a422a851b54a676234d17f7',
     title: 'React patterns',
     author: 'Michael Chan',
     url: 'https://reactpatterns.com/',
     likes: 7,
+    user,
     __v: 0
   },
   {
@@ -24,6 +25,7 @@ const blogsList = [
     author: 'Edsger W. Dijkstra',
     url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
     likes: 5,
+    user,
     __v: 0
   },
   {
@@ -32,6 +34,7 @@ const blogsList = [
     author: 'Edsger W. Dijkstra',
     url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
     likes: 12,
+    user,
     __v: 0
   },
   {
@@ -40,6 +43,7 @@ const blogsList = [
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
     likes: 10,
+    user,
     __v: 0
   },
   {
@@ -48,6 +52,7 @@ const blogsList = [
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
     likes: 0,
+    user,
     __v: 0
   },
   {
@@ -56,9 +61,10 @@ const blogsList = [
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
     likes: 2,
+    user,
     __v: 0
   }
-];
+]);
 
 const blogListFavorite = {
   _id: '5a422b3a1b54a676234d17f9',
@@ -82,7 +88,7 @@ const blogListMostLiked = {
 
 module.exports = {
   listWithOneBlog,
-  blogsList,
+  createBlogList,
   blogListFavorite,
   blogListMostBlogs,
   blogListMostLiked
