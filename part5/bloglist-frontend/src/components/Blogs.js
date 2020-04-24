@@ -3,7 +3,7 @@ import blogService from '../services/blogs.service';
 import Blog from './Blog';
 
 
-const Blogs = ({ user }) => {
+const Blogs = ({ user, setUser }) => {
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
@@ -15,10 +15,17 @@ const Blogs = ({ user }) => {
     fetchData();
   }, []);
 
+
+  const handleLogout = (event) => {
+    event.preventDefault();
+    window.localStorage.setItem('user', '');
+    setUser(null);
+  };
+
   return (
     <>
       <h2>blogs</h2>
-      {user.name} logged in
+      {user.name} logged in <button onClick={handleLogout}>logout</button>
       <p>
         {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
       </p>

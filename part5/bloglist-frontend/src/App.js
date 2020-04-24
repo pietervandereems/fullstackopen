@@ -13,12 +13,10 @@ const App = () => {
     setTimeout(() => setNotification({ txt: '' }), note.full ? 10000 : 5000);
   };
 
-
-
   return (
     <>
       <Notification notification={notification} />
-      {user ? <Blogs user={user} /> : <Login sendNotification={sendNotification} setUser={setUser} />}
+      {user ? <Blogs user={user} setUser={setUser} /> : <Login sendNotification={sendNotification} setUser={setUser} />}
 
     </>
   );
