@@ -14,21 +14,24 @@ const CreateBlogs = ({ user, setBlogs, blogs }) => {
   };
 
   return (
-    <form onSubmit={saveBlog}>
-      <label>
-        title
-        <input type="text" onChange={handleChange('title')} />
-      </label><br />
-      <label>
-        author
-        <input type="text" onChange={handleChange('author')} />
-      </label><br />
-      <label>
-        url
-        <input type="text" onChange={handleChange('url')} />
-      </label><br />
-      <button type="submit">create</button>
-    </form>
+    <>
+      <h2>create new</h2>
+      <form onSubmit={saveBlog}>
+        <label>
+          title
+          <input type="text" onChange={handleChange('title')} />
+        </label><br />
+        <label>
+          author
+          <input type="text" onChange={handleChange('author')} />
+        </label><br />
+        <label>
+          url
+          <input type="text" onChange={handleChange('url')} />
+        </label><br />
+        <button type="submit">create</button>
+      </form>
+    </>
   );
 };
 
