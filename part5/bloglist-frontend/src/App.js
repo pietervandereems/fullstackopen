@@ -16,7 +16,10 @@ const App = () => {
   return (
     <>
       <Notification notification={notification} />
-      {user ? <Blogs user={user} setUser={setUser} /> : <Login sendNotification={sendNotification} setUser={setUser} />}
+      {user ?
+        <Blogs user={user} setUser={setUser} /> :
+        <Login sendNotification={sendNotification} setUser={setUser} />
+      }
 
     </>
   );

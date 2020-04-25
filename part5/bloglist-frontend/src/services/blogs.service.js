@@ -1,9 +1,15 @@
 import axios from 'axios';
 const baseUrl = '/api/blogs';
 
-const getAll = () => {
-  const request = axios.get(baseUrl);
-  return request.then(response => response.data);
+const getAll = async () => {
+  const response = await axios.get(baseUrl);
+  return response.data;
 };
 
-export default { getAll };
+const addBlog = async (blog = {}, { token }) => {
+  const request = await axios
+    .post(baseUrl, blog, { headers: { Authorization: `Bearer ${token}` } });
+  return request.data;
+};
+
+export default { getAll, addBlog };
