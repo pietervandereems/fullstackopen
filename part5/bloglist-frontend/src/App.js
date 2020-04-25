@@ -17,7 +17,7 @@ const App = () => {
     <>
       <Notification notification={notification} />
       {user ?
-        <Blogs user={user} setUser={setUser} /> :
+        <Blogs user={user} setUser={setUser} sendNotification={sendNotification} /> :
         <Login sendNotification={sendNotification} setUser={setUser} />
       }
 

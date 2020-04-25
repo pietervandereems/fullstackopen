@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import blogService from '../services/blogs.service';
 
-const CreateBlogs = ({ user, setBlogs, blogs }) => {
+const CreateBlogs = ({ user, setBlogs, blogs, sendNotification }) => {
   const [blog, setBlog] = useState({});
 
   const handleChange = (item) => ({ target: { value } }) => setBlog({ ...blog, [item]: value });
@@ -10,6 +10,7 @@ const CreateBlogs = ({ user, setBlogs, blogs }) => {
     event.preventDefault();
 
     const savedBlog = await blogService.addBlog(blog, user);
+    sendNotification({ txt: `a new blog ${savedBlog.title} by ${savedBlog.author} added` });
     setBlogs([...blogs, savedBlog]);
   };
 

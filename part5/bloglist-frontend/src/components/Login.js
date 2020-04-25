@@ -8,7 +8,7 @@ const Login = ({ sendNotification, setUser }) => {
   useEffect(() => {
     try {
       const user = JSON.parse(window.localStorage.getItem('user'));
-      console.log('login useEffect',{user});
+      console.log('login useEffect', { user });
       setUser(user);
     } catch (err) {
       //
@@ -23,7 +23,7 @@ const Login = ({ sendNotification, setUser }) => {
       });
       setUsername('');
       setPassword('');
-      sendNotification({ txt: 'Welkom' });
+      sendNotification({ txt: `Welkom ${user.name}` });
       window.localStorage.setItem('user', JSON.stringify(user));
       setUser(user);
     } catch (exception) {
