@@ -1,6 +1,6 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import Blog from './Blog';
 
 describe('<Blog />', () => {
@@ -29,6 +29,28 @@ describe('<Blog />', () => {
       'A test blog title testy tester'
     );
     expect(element).toBeDefined();
+
+    const details = component.container.querySelector('p');
+    expect(details).toHaveStyle('display: none');
+
+    const likes = component.getByText(/likes 1/);
+    expect(likes).not.toBeVisible();
+    const url = component.getByText(/http:\/\/test/);
+    expect(url).not.toBeVisible();
+  });
+
+  test('shows details when view clicked', () => {
+    const button = component.getByText('view');
+    fireEvent.click(button);
+
+    const details = component.container.querySelector('p');
+    expect(details).not.toHaveStyle('display: none');
+
+
+    const likes = component.getByText(/likes 1/);
+    expect(likes).toBeVisible();
+    const url = component.getByText(/http:\/\/test/);
+    expect(url).toBeVisible();
   });
 
 
