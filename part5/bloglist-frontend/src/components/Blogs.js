@@ -37,6 +37,12 @@ const Blogs = ({ user, setUser, sendNotification }) => {
     setBlogs(blogs.map(b => b.id === blog.id ? blog : b));
   };
 
+  const deleteBlog = async (blog) => {
+    await blogService.deleteBlog(blog, user);
+    sendNotification({txt: `${blog.title} removed`});
+    setBlogs(blogs.filter(b => b.id !== blog.id));
+  };
+
   return (
     <>
       <h2>blogs</h2>
@@ -47,7 +53,7 @@ const Blogs = ({ user, setUser, sendNotification }) => {
       <section>
         {blogs
           .sort((a, b) => b.likes - a.likes)
-          .map(blog => <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />)
+          .map(blog => <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} userId={user.id}/>)
         }
       </section>
     </>

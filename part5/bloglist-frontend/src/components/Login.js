@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import loginService from '../services/login.service';
+import jsonwebtoken from 'jsonwebtoken';
 
 const Login = ({ sendNotification, setUser }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   useEffect(() => {
+    const localUser = window.localStorage.getItem('user');
+    if (!localUser) {
+      return;
+    }
     try {
       const user = JSON.parse(window.localStorage.getItem('user'));
       setUser(user);
     } catch (err) {
-      console.error('Error setting user', err);
+      console.error('Error setting user from localStorage', err);
     }
   }, [setUser]);
 
@@ -23,7 +28,10 @@ const Login = ({ sendNotification, setUser }) => {
       setUsername('');
       setPassword('');
       sendNotification({ txt: `Welkom ${user.name}` });
-      window.localStorage.setItem('user', JSON.stringify(user));
+      window.localStorage.setItem('user', JSON.stringify({
+        ...user,
+        id: jsonwebtoken.decode(user.token).id
+      }));
       setUser(user);
     } catch (exception) {
       console.error('login problem', exception);
