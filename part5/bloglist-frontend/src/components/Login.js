@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import loginService from '../services/login.service';
 import jsonwebtoken from 'jsonwebtoken';
+import PropTypes from 'prop-types';
 
 const Login = ({ sendNotification, setUser }) => {
   const [username, setUsername] = useState('');
@@ -56,6 +57,11 @@ const Login = ({ sendNotification, setUser }) => {
       </form>
     </>
   );
+};
+
+Login.propTypes = {
+  sendNotification: PropTypes.func.isRequired,
+  setUser: PropTypes.func.isRequired
 };
 
 export default Login;

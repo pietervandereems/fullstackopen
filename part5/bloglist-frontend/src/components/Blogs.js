@@ -3,6 +3,7 @@ import blogService from '../services/blogs.service';
 import Blog from './Blog';
 import CreateBlogs from './CreateBlog';
 import Togglable from './Togglable';
+import PropTypes from 'prop-types';
 
 const Blogs = ({ user, setUser, sendNotification }) => {
   const [blogs, setBlogs] = useState([]);
@@ -39,7 +40,7 @@ const Blogs = ({ user, setUser, sendNotification }) => {
 
   const deleteBlog = async (blog) => {
     await blogService.deleteBlog(blog, user);
-    sendNotification({txt: `${blog.title} removed`});
+    sendNotification({ txt: `${blog.title} removed` });
     setBlogs(blogs.filter(b => b.id !== blog.id));
   };
 
@@ -53,11 +54,21 @@ const Blogs = ({ user, setUser, sendNotification }) => {
       <section>
         {blogs
           .sort((a, b) => b.likes - a.likes)
-          .map(blog => <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} userId={user.id}/>)
+          .map(blog => <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} userId={user.id} />)
         }
       </section>
     </>
   );
 };
+
+Blogs.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string
+  }),
+  setUser: PropTypes.func.isRequired,
+  sendNotification: PropTypes.func.isRequired
+};
+
 
 export default Blogs;
