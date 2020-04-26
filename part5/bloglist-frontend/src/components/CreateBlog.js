@@ -28,7 +28,7 @@ const CreateBlogs = ({ saveBlog }) => {
           url
           <input type="text" onChange={handleChange('url')} />
         </label><br />
-        <button type="submit">create</button>
+        <button aria-label="submit" type="submit">create</button>
       </form>
     </>
   );
