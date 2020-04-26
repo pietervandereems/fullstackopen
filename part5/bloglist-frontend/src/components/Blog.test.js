@@ -4,7 +4,8 @@ import { render, fireEvent } from '@testing-library/react';
 import Blog from './Blog';
 
 describe('<Blog />', () => {
-  const dummyFunc = () => true;
+  const mockUpdate = jest.fn();
+  const mockDelete = jest.fn();
   let component;
 
   beforeEach(() => {
@@ -20,7 +21,7 @@ describe('<Blog />', () => {
     };
 
     component = render(
-      <Blog blog={blog} updateBlog={dummyFunc} deleteBlog={dummyFunc} />
+      <Blog blog={blog} updateBlog={mockUpdate} deleteBlog={mockDelete} />
     );
   });
 
@@ -51,6 +52,15 @@ describe('<Blog />', () => {
     expect(likes).toBeVisible();
     const url = component.getByText(/http:\/\/test/);
     expect(url).toBeVisible();
+  });
+
+  test('updates blog twice for two likes', () => {
+    fireEvent.click(component.getByText('view'));
+
+    const likeButton = component.getByText('like');
+    fireEvent.click(likeButton);
+    fireEvent.click(likeButton);
+    expect(mockUpdate.mock.calls).toHaveLength(2);
   });
 
 
