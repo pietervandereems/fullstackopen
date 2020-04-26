@@ -7,8 +7,8 @@ const CreateBlogs = ({ saveBlog }) => {
 
   const addBlog = (event) => {
     event.preventDefault();
-    setBlog({});
     saveBlog(blog);
+    setBlog({});
   };
 
   return (

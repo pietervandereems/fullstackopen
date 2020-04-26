@@ -6,6 +6,7 @@ import Togglable from './Togglable';
 
 const Blogs = ({ user, setUser, sendNotification }) => {
   const [blogs, setBlogs] = useState([]);
+  const blogFormRef = React.createRef();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,17 +25,17 @@ const Blogs = ({ user, setUser, sendNotification }) => {
   };
 
   const saveBlog = async (blog) => {
+    blogFormRef.current.toggleVisibility();
     const savedBlog = await blogService.addBlog(blog, user);
     sendNotification({ txt: `a new blog ${savedBlog.title} by ${savedBlog.author} added` });
     setBlogs([...blogs, savedBlog]);
-
   };
 
   return (
     <>
       <h2>blogs</h2>
       {user.name} logged in <button onClick={handleLogout}>logout</button>
-      <Togglable buttonLabel="new note">
+      <Togglable buttonLabel="new note" ref={blogFormRef}>
         <CreateBlogs saveBlog={saveBlog} sendNotification={sendNotification} />
       </Togglable>
       <p>

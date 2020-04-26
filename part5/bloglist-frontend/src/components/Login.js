@@ -8,10 +8,9 @@ const Login = ({ sendNotification, setUser }) => {
   useEffect(() => {
     try {
       const user = JSON.parse(window.localStorage.getItem('user'));
-      console.log('login useEffect', { user });
       setUser(user);
     } catch (err) {
-      //
+      console.error('Error setting user', err);
     }
   }, [setUser]);
 
