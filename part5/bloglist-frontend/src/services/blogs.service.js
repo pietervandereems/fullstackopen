@@ -12,4 +12,14 @@ const addBlog = async (blog = {}, { token }) => {
   return request.data;
 };
 
-export default { getAll, addBlog };
+const updateBlog = async (blog = {}, { token }) => {
+  const mongoBlog = {
+    ...blog,
+    user: blog.user.id
+  };
+  const response = await axios
+    .put(`${baseUrl}/${blog.id}`, mongoBlog, { headers: { Authorization: `Bearer ${token}` } });
+  return response.data;
+};
+
+export default { getAll, addBlog, updateBlog };

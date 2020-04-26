@@ -31,15 +31,21 @@ const Blogs = ({ user, setUser, sendNotification }) => {
     setBlogs([...blogs, savedBlog]);
   };
 
+  const updateBlog = async (blog) => {
+    await blogService.updateBlog(blog, user);
+    sendNotification({ txt: `liked ${blog.title}` });
+    setBlogs(blogs.map(b => b.id === blog.id ? blog : b));
+  };
+
   return (
     <>
       <h2>blogs</h2>
       {user.name} logged in <button onClick={handleLogout}>logout</button>
       <Togglable buttonLabel="new note" ref={blogFormRef}>
-        <CreateBlogs saveBlog={saveBlog} sendNotification={sendNotification} />
+        <CreateBlogs saveBlog={saveBlog} />
       </Togglable>
       <section>
-        {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
+        {blogs.map(blog => <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />)}
       </section>
     </>
   );
