@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
-import blogService from '../services/blogs.service';
 
-const CreateBlogs = ({ user, setBlogs, blogs, sendNotification }) => {
+const CreateBlogs = ({ saveBlog }) => {
   const [blog, setBlog] = useState({});
 
   const handleChange = (item) => ({ target: { value } }) => setBlog({ ...blog, [item]: value });
 
-  const saveBlog = async (event) => {
+  const addBlog = (event) => {
     event.preventDefault();
-
-    const savedBlog = await blogService.addBlog(blog, user);
-    sendNotification({ txt: `a new blog ${savedBlog.title} by ${savedBlog.author} added` });
-    setBlogs([...blogs, savedBlog]);
+    setBlog({});
+    saveBlog(blog);
   };
 
   return (
     <>
       <h2>create new</h2>
-      <form onSubmit={saveBlog}>
+      <form onSubmit={addBlog}>
         <label>
           title
           <input type="text" onChange={handleChange('title')} />

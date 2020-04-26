@@ -23,12 +23,19 @@ const Blogs = ({ user, setUser, sendNotification }) => {
     setUser(null);
   };
 
+  const saveBlog = async (blog) => {
+    const savedBlog = await blogService.addBlog(blog, user);
+    sendNotification({ txt: `a new blog ${savedBlog.title} by ${savedBlog.author} added` });
+    setBlogs([...blogs, savedBlog]);
+
+  };
+
   return (
     <>
       <h2>blogs</h2>
       {user.name} logged in <button onClick={handleLogout}>logout</button>
       <Togglable buttonLabel="new note">
-        <CreateBlogs user={user} setBlogs={setBlogs} blogs={blogs} sendNotification={sendNotification} />
+        <CreateBlogs saveBlog={saveBlog} sendNotification={sendNotification} />
       </Togglable>
       <p>
         {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
