@@ -1,13 +1,15 @@
 const info = (...params) => {
-  if (process.env.NODE_ENV !== 'test') {
-    console.log(...params);
-  }
+  console.log(...params);
 };
 
 const error = (...params) => {
   if (process.env.NODE_ENV !== 'test') {
     console.error(...params);
   }
+};
+
+const warn = (...params) => {
+  console.warn(...params);
 };
 
 const fpLog = (text) => (param) => {
@@ -18,5 +20,6 @@ const fpLog = (text) => (param) => {
 module.exports = {
   info,
   error,
+  warn,
   fpLog
 };

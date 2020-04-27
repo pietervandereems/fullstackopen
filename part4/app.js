@@ -35,6 +35,11 @@ app.use('/api/login', loginRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/blogs', blogsRouter);
 
+if (config.TESTINGMODE) {
+  const testingRouter = require('./controllers/testing.controller');
+  app.use('/api/testing', testingRouter);
+}
+
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 

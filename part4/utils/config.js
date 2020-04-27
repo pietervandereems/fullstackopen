@@ -1,15 +1,20 @@
 require('dotenv').config();
+const logger = require('./logger');
 
-let PORT = process.env.PORT;
+const PORT = process.env.PORT;
 let MONGODB_URI = process.env.MONGODB_URI;
-let SECRET = process.env.SECRET;
+const SECRET = process.env.SECRET;
+let TESTINGMODE = false;
 
 if (process.env.NODE_ENV === 'test') {
+  logger.warn('TESTING Mode enabled');
   MONGODB_URI = process.env.TEST_MONGODB_URI;
+  TESTINGMODE = true;
 }
 
 module.exports = {
   MONGODB_URI,
   PORT,
-  SECRET
+  SECRET,
+  TESTINGMODE
 };
