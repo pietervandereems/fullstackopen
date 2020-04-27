@@ -44,7 +44,7 @@ describe('Blog app', function () {
     });
   });
 
-  describe.only('When logged in', function () {
+  describe('When logged in', function () {
     const blog = {
       title: 'bloggy test title',
       author: 'bloggy blogger',
@@ -84,6 +84,52 @@ describe('Blog app', function () {
         .and('have.css', 'color', 'rgb(0, 100, 0)')
         .and('have.css', 'border-style', 'solid');
       cy.get('#bloglisting').get('article').contains('likes 1');
+    });
+
+    it('A blog can be deleted by creator', function () {
+      cy.createBlog(blog);
+      cy.get('#bloglisting').get('article').within(() => {
+        cy.contains('view').click();
+        cy.contains('remove').click();
+      });
+
+      cy.get('#notification')
+        .should('contain', `${blog.title} removed`)
+        .and('have.css', 'color', 'rgb(0, 100, 0)')
+        .and('have.css', 'border-style', 'solid');
+      cy.get('#bloglisting').get('article').should('have.length', 0);
+    });
+
+
+  });
+
+  describe('when logged in as "wrong" user', function () {
+    const blog = {
+      title: 'bloggy test title',
+      author: 'bloggy blogger',
+      url: 'http://to.some.where/not/here/though'
+    };
+
+    const anotherUser = {
+      name: 'Mr. wrong',
+      username: 'mwrong',
+      password: '0123456789'
+    };
+
+    beforeEach(function () {
+      cy.login(user);
+      cy.createBlog(blog);
+      cy.request('POST', 'http://localhost:3001/api/users/', anotherUser);
+      window.localStorage.setItem('user', '');
+      cy.login(anotherUser);
+    });
+
+    it('A blog can only be deleted by its user', function () {
+      cy.get('#bloglisting').get('article').within(() => {
+        cy.contains('view').click();
+        cy.should('not.contain', 'remove');
+      });
+
     });
   });
 
