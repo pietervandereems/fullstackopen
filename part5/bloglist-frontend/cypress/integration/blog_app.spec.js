@@ -133,4 +133,49 @@ describe('Blog app', function () {
     });
   });
 
+  describe.only('when we have multiple blogs', function () {
+    const blogs = [
+      {
+        title: 'test title with 7 likes',
+        author: 'bloggy blogger',
+        url: 'http://to.some.where/7',
+        likes: 7
+      },
+      {
+        title: 'test title with 1 likes',
+        author: 'bloggy blogger',
+        url: 'http://to.some.where/1',
+        likes: 1
+      },
+      {
+        title: 'test title with 20 likes',
+        author: 'bloggy blogger',
+        url: 'http://to.some.where/20',
+        likes: 20
+      },
+      {
+        title: 'test title with 0 likes',
+        author: 'bloggy blogger',
+        url: 'http://to.some.where/0',
+        likes: 0
+      },
+    ];
+
+    beforeEach(function () {
+      cy.login(user);
+      blogs.forEach((blog) => cy.createBlog(blog));
+    });
+
+    it('blogs should be sorted by likes', function () {
+      cy.get('#bloglisting').get('article')
+        .then((art) => {
+          const arr = art.map(function () {
+            return parseInt(this.querySelector('p').dataset.likes, 10);
+          }).toArray();
+          return arr;
+        })
+        .should('deep.equal', blogs.map(blog => blog.likes).sort((a, b) => b - a));
+    });
+  });
+
 });

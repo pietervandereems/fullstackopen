@@ -36,7 +36,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, userId }) => {
   return (
     <article style={blogStyle}>
       {blog.title} {blog.author}<button onClick={toggleDetails}>{visible ? 'hide' : 'view'}</button><br />
-      <p style={showDetails}>
+      <p data-likes={blog.likes} style={showDetails}>
         {blog.url}<br />
         likes {blog.likes}<button onClick={like}>like</button><br />
         {blog.author}<br />
