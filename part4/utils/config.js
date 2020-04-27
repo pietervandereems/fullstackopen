@@ -7,7 +7,7 @@ const SECRET = process.env.SECRET;
 let TESTINGMODE = false;
 
 if (process.env.NODE_ENV === 'test') {
-  logger.warn('TESTING Mode enabled');
+  logger.warn('\nTESTING Mode enabled\n');
   MONGODB_URI = process.env.TEST_MONGODB_URI;
   TESTINGMODE = true;
 }
