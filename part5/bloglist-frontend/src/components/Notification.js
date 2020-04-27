@@ -26,7 +26,7 @@ const Notification = ({ notification: { txt, full, isError } }) => {
   };
 
   return (
-    <div style={isError ? errorStyle : noteStyle}>
+    <div id="notification" style={isError ? errorStyle : noteStyle}>
       {txt}
       {full ? <p>{full}</p> : null}
     </div>
