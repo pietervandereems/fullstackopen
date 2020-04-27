@@ -23,3 +23,16 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+import jsonwebtoken from 'jsonwebtoken';
+
+Cypress.Commands.add('login', ({ username, password }) => {
+  cy.request('POST', 'http://localhost:3001/api/login', {
+    username, password
+  }).then(({ body }) => {
+    window.localStorage.setItem('user', JSON.stringify({
+      ...body,
+      id: jsonwebtoken.decode(body.token).id
+    }));
+    cy.visit('http://localhost:3000')
+  });
+});

@@ -44,4 +44,34 @@ describe('Blog app', function () {
     });
   });
 
+  describe.only('When logged in', function () {
+    const blog = {
+      title: 'bloggy test title',
+      author: 'bloggy blogger',
+      url: 'http://to.some.where/not/here/though'
+    };
+
+    beforeEach(function () {
+      cy.login(user);
+    });
+
+    it('A blog can be created', function () {
+      cy.contains('new note').click();
+      cy.get('form').within(() => {
+        cy.get('input[name="Title"]').type(blog.title);
+        cy.get('input[name="Author"]').type(blog.author);
+        cy.get('input[name="Url"]').type(blog.url);
+        cy.get('button[type=submit]').click();
+      });
+      cy.get('#notification')
+        .should('contain', `a new blog ${blog.title} by ${blog.author} added`)
+        .and('have.css', 'color', 'rgb(0, 100, 0)')
+        .and('have.css', 'border-style', 'solid');
+      cy.get('#bloglisting').get('article')
+        .should('have.length', 1)
+        .should('contain', `${blog.title} ${blog.author}`)
+        .should('contain', 'view');
+    });
+  });
+
 });

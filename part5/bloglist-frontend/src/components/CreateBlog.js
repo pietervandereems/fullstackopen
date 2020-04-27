@@ -18,15 +18,15 @@ const CreateBlogs = ({ saveBlog }) => {
       <form onSubmit={addBlog}>
         <label>
           title
-          <input type="text" onChange={handleChange('title')} />
+          <input type="text" name="Title" onChange={handleChange('title')} />
         </label><br />
         <label>
           author
-          <input type="text" onChange={handleChange('author')} />
+          <input type="text" name="Author" onChange={handleChange('author')} />
         </label><br />
         <label>
           url
-          <input type="text" onChange={handleChange('url')} />
+          <input type="text" name="Url" onChange={handleChange('url')} />
         </label><br />
         <button aria-label="submit" type="submit">create</button>
       </form>
