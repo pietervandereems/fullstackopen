@@ -72,6 +72,19 @@ describe('Blog app', function () {
         .should('contain', `${blog.title} ${blog.author}`)
         .should('contain', 'view');
     });
+
+    it('A blog can be liked', function () {
+      cy.createBlog(blog);
+      cy.get('#bloglisting').get('article').within(() => {
+        cy.contains('view').click();
+        cy.contains('like').click();
+      });
+      cy.get('#notification')
+        .should('contain', `liked ${blog.title}`)
+        .and('have.css', 'color', 'rgb(0, 100, 0)')
+        .and('have.css', 'border-style', 'solid');
+      cy.get('#bloglisting').get('article').contains('likes 1');
+    });
   });
 
 });
