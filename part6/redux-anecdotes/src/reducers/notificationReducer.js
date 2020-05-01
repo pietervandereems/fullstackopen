@@ -6,9 +6,14 @@ const reducer = (state = '', action) => {
   }
 };
 
-export const notify = (notification) => ({
+export const setNotification = (notification) => ({
   type: 'NOTIFY',
   notification
+});
+
+export const removeNotification = () => ({
+  type: 'NOTIFY',
+  notification: ''
 });
 
 export default reducer;
