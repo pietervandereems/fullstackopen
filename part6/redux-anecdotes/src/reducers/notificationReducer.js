@@ -7,13 +7,17 @@ const reducer = (state = '', action) => {
   }
 };
 
+let notificationTimer;
 
 export const setNotification = (notification, sec = 5) => async dispatch => {
+  if (notificationTimer) {
+    clearTimeout(notificationTimer);
+  }
   dispatch({
     type: 'SET_NOTIFICATION',
     notification
   });
-  setTimeout(() => dispatch({
+  notificationTimer = setTimeout(() => dispatch({
     type: 'SET_NOTIFICATION',
     notification: ''
   }), sec * 1000);
