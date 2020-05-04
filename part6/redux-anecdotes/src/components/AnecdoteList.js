@@ -1,23 +1,30 @@
 import React from 'react';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { makeAVote } from '../reducers/anecdoteReducer';
-// import { setNotification } from '../reducers/notificationReducer';
+import { makeAVote } from '../reducers/anecdoteReducer';
+import { setNotification } from '../reducers/notificationReducer';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-const AnecdoteList = ({ anecdotes }) => (
-  <>
-    {anecdotes.sort((a, b) => b.votes - a.votes).map(anecdote =>
-      <article key={anecdote.id}>
-        <p>
-          {anecdote.content} <br />
+const AnecdoteList = ({ anecdotes, makeAVote, setNotification }) => {
+
+  const vote = (anecdote) => {
+    setNotification(`you voted '${anecdote.content}'`, 10);
+    makeAVote(anecdote);
+  };
+
+  return (
+    <>
+      {anecdotes.sort((a, b) => b.votes - a.votes).map(anecdote =>
+        <article key={anecdote.id}>
+          <p>
+            {anecdote.content} <br />
             has {anecdote.votes}
-          <button onClick={() => true}>vote</button>
-        </p>
-      </article>
-    )}
-  </>
-);
+            <button onClick={() => vote(anecdote)}>vote</button>
+          </p>
+        </article>
+      )}
+    </>
+  );
+};
 
 const mapStateToProps = ({ anecdotes, filter }) => ({
   anecdotes: filter ?
@@ -25,8 +32,15 @@ const mapStateToProps = ({ anecdotes, filter }) => ({
     anecdotes
 });
 
-AnecdoteList.propTypes = {
-  anecdotes: PropTypes.array
+const mapDispatchToProps = {
+  makeAVote,
+  setNotification
 };
 
-export default connect(mapStateToProps)(AnecdoteList);
+AnecdoteList.propTypes = {
+  anecdotes: PropTypes.array,
+  makeAVote: PropTypes.func,
+  setNotification: PropTypes.func
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AnecdoteList);

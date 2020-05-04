@@ -1,15 +1,15 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { createAnecdote } from '../reducers/anecdoteReducer';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
-const AnecdoteForm = () => {
-  const dispatch = useDispatch();
+const AnecdoteForm = ({ createAnecdote }) => {
 
   const create = async (event) => {
     event.preventDefault();
     const anecdote = event.target.anecdote.value;
     event.target.anecdote.value = '';
-    dispatch(createAnecdote(anecdote));
+    createAnecdote(anecdote);
   };
 
   return (
@@ -22,6 +22,12 @@ const AnecdoteForm = () => {
     </>
   );
 };
+const mapDispatchToProps = {
+  createAnecdote
+};
 
+AnecdoteForm.propTypes = {
+  createAnecdote: PropTypes.func
+};
 
-export default AnecdoteForm;
+export default connect(null, mapDispatchToProps)(AnecdoteForm);
