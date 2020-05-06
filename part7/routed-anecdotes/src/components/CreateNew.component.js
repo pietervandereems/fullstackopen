@@ -7,14 +7,21 @@ const CreateNew = ({ addNew }) => {
   const author = useField('text');
   const info = useField('text');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
     addNew({
       content: content.value,
       author: author.value,
       info: info.value,
       votes: 0
     });
+  };
+
+  const resetForm = (event) => {
+    event.preventDefault();
+    content.onChange();
+    author.onChange();
+    info.onChange();
   };
 
   return (
@@ -24,16 +31,17 @@ const CreateNew = ({ addNew }) => {
         <label>
           content
           <input {...content} />
-        </label><br/>
+        </label><br />
         <label>
           author
           <input {...author} />
-        </label><br/>
+        </label><br />
         <label>
           url for more info
           <input {...info} />
-        </label><br/>
+        </label><br />
         <button>create</button>
+        <button onClick={resetForm}>reset</button>
       </form>
     </section>
   );
