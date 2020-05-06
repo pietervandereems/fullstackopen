@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import About from './components/about.component';
-import Footer from './components/footer.component';
-import AnecdoteList from './components/anecdoteList.component';
-import Menu from './components/menu.component';
-import CreateNew from './components/createNew.component';
+import About from './components/About.component';
+import Footer from './components/Footer.component';
+import AnecdoteList from './components/AnecdoteList.component';
+import Menu from './components/Menu.component';
+import CreateNew from './components/CreateNew.component';
 import {
   Switch,
   Route,
+  useHistory,
   useRouteMatch
 } from 'react-router-dom';
-import Anecdote from './components/anecdote.component';
+import Anecdote from './components/Anecdote.component';
+import Notification from './components/Notification.component';
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -28,12 +30,15 @@ const App = () => {
       id: '2'
     }
   ]);
-
   const [notification, setNotification] = useState('');
+  const history = useHistory();
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0);
     setAnecdotes(anecdotes.concat(anecdote));
+    history.push('/');
+    setNotification(`a new anecdote ${anecdote.content} created!`);
+    setTimeout(() => setNotification(''), 10000);
   };
 
   const anecdoteById = (id) =>
@@ -57,6 +62,7 @@ const App = () => {
     <>
       <h1>Software anecdotes</h1>
       <Menu />
+      <Notification notification={notification} />
 
       <Switch>
         <Route path="/anecdote/:id">
