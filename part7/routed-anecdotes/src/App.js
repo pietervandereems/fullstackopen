@@ -6,8 +6,10 @@ import Menu from './components/menu.component';
 import CreateNew from './components/createNew.component';
 import {
   Switch,
-  Route
+  Route,
+  useRouteMatch
 } from 'react-router-dom';
+import Anecdote from './components/anecdote.component';
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -48,12 +50,18 @@ const App = () => {
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a));
   };
 
+  const match = useRouteMatch('/anecdote/:id');
+  const anecdote = match ? anecdoteById(match.params.id) : null;
+
   return (
     <>
       <h1>Software anecdotes</h1>
       <Menu />
 
       <Switch>
+        <Route path="/anecdote/:id">
+          <Anecdote anecdote={anecdote} />
+        </Route>
         <Route path="/about">
           <About />
         </Route>
