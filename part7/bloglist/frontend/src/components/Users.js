@@ -37,6 +37,7 @@ const Users = () => {
       <h2>Users</h2>
       <table>
         <tbody>
+          <tr><th></th><th>blogs created</th></tr>
           {blogCountList.map(blogCount => <User key={blogCount.id} user={blogCount} />)}
         </tbody>
       </table>
