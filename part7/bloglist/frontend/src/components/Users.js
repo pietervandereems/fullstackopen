@@ -1,10 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const User = ({ user }) => (
   <tr>
-    <td>{user.name}</td>
+    <td> <Link to={`/users/${user.id}`}>{user.name}</Link></td>
     <td>{user.blogs}</td>
   </tr>
 );
@@ -48,7 +49,8 @@ const Users = () => {
 User.propTypes = {
   user: PropTypes.shape({
     name: PropTypes.string,
-    blogs: PropTypes.number
+    blogs: PropTypes.number,
+    id: PropTypes.string
   })
 };
 

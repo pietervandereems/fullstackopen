@@ -10,6 +10,7 @@ import {
   Route
 } from 'react-router-dom';
 import Users from './components/Users';
+import UserOverview from './components/UserOverview';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,9 @@ const App = () => {
         <section>
           {user.name} logged in <button onClick={handleLogout}>logout</button>
           <Switch>
+            <Route path="/users/:id">
+              <UserOverview />
+            </Route>
             <Route path="/users">
               <Users />
             </Route>
