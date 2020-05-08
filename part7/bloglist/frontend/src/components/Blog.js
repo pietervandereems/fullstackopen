@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateBlog, deleteBlog } from '../reducers/blogs.reducer';
+import { setNotification } from '../reducers/notification.reducer';
 
-const Blog = ({ blog, updateBlog, deleteBlog, userId }) => {
+const Blog = ({ blog }) => {
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
   const [visible, setVisibility] = useState(false);
   const showDetails = { display: visible ? '' : 'none' };
 
@@ -18,18 +23,20 @@ const Blog = ({ blog, updateBlog, deleteBlog, userId }) => {
     setVisibility(!visible);
   };
 
-  const like = (event) => {
+  const like = async (event) => {
     event.preventDefault();
-    updateBlog({
+    const updatedBlog = await dispatch(updateBlog({
       ...blog,
       likes: blog.likes + 1
-    });
+    }));
+    dispatch(setNotification({ txt: `liked ${updatedBlog.title}` }));
   };
 
-  const remove = (event) => {
+  const remove = async (event) => {
     event.preventDefault();
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      deleteBlog(blog);
+      await dispatch(deleteBlog(blog));
+      dispatch(setNotification({ txt: `${blog.title} removed` }));
     }
   };
 
@@ -40,7 +47,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, userId }) => {
         {blog.url}<br />
         likes {blog.likes}<button onClick={like}>like</button><br />
         {blog.author}<br />
-        {blog.user.id === userId ? <button onClick={remove}>remove</button> : null}
+        {blog.user.id === user.id ? <button onClick={remove}>remove</button> : null}
       </p>
     </article >
   );
@@ -56,10 +63,7 @@ Blog.propTypes = {
     user: PropTypes.shape({
       id: PropTypes.string.isRequired
     })
-  }),
-  updateBlog: PropTypes.func.isRequired,
-  deleteBlog: PropTypes.func.isRequired,
-  userId: PropTypes.string
+  })
 };
 
 export default Blog;

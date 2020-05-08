@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setNotification } from '../reducers/notification.reducer';
+import { addBlog } from '../reducers/blogs.reducer';
 import PropTypes from 'prop-types';
 
-const CreateBlogs = ({ saveBlog }) => {
+const CreateBlogs = ({ toggleVisibility }) => {
+  const dispatch = useDispatch();
   const [blog, setBlog] = useState({});
 
   const handleChange = (item) => ({ target: { value } }) => setBlog({ ...blog, [item]: value });
 
-  const addBlog = (event) => {
+  const createBlog = async (event) => {
     event.preventDefault();
-    saveBlog(blog);
-    setBlog({});
+    toggleVisibility();
+    const savedBlog = await dispatch(addBlog(blog));
+    dispatch(setNotification({ txt: `a new blog ${savedBlog.title} by ${savedBlog.author} added` }));
   };
 
   return (
     <>
       <h2>create new</h2>
-      <form onSubmit={addBlog}>
+      <form onSubmit={createBlog}>
         <label>
           title
           <input type="text" name="Title" onChange={handleChange('title')} />
@@ -35,7 +40,7 @@ const CreateBlogs = ({ saveBlog }) => {
 };
 
 CreateBlogs.propTypes = {
-  saveBlog: PropTypes.func.isRequired
+  toggleVisibility: PropTypes.func
 };
 
 export default CreateBlogs;

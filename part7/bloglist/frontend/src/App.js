@@ -1,24 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Notification from './components/Notification';
 import Login from './components/Login';
 import Blogs from './components/Blogs';
+import { initializeBlogs } from './reducers/blogs.reducer';
+import { initialLogin } from './reducers/user.reducer';
 
 
 const App = () => {
-  const [user, setUser] = useState(null);
-  const [notification, setNotification] = useState({});
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
 
-  const sendNotification = (note = { txt: '', full: '', isError: false }) => {
-    setNotification(note);
-    setTimeout(() => setNotification({ txt: '' }), note.full ? 10000 : 5000);
-  };
+  useEffect(() => {
+    dispatch(initializeBlogs());
+    dispatch(initialLogin());
+  }, [dispatch]);
 
   return (
     <>
-      <Notification notification={notification} />
+      <Notification />
       {user ?
-        <Blogs user={user} setUser={setUser} sendNotification={sendNotification} /> :
-        <Login sendNotification={sendNotification} setUser={setUser} />
+        <Blogs /> :
+        <Login />
       }
 
     </>

@@ -20,7 +20,7 @@ const Togglable = React.forwardRef(({ buttonLabel, children }, ref) => {
         <button onClick={toggleVisibility}>{buttonLabel}</button>
       </section>
       <section style={showWhenVisible}>
-        {children}
+        {React.cloneElement(children, { toggleVisibility })}
         <button onClick={toggleVisibility}>cancel</button>
       </section>
     </>

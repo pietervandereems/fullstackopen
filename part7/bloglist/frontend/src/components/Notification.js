@@ -1,7 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
-const Notification = ({ notification: { txt, full, isError } }) => {
+const Notification = () => {
+  const { txt, full, isError } = useSelector(state => state.notification);
   if (!txt) {
     return null;
   }
@@ -32,14 +33,6 @@ const Notification = ({ notification: { txt, full, isError } }) => {
     </div>
   );
 
-};
-
-Notification.propTypes = {
-  notification: PropTypes.shape({
-    txt: PropTypes.string,
-    full: PropTypes.string,
-    isError: PropTypes.bool
-  })
 };
 
 export default Notification;

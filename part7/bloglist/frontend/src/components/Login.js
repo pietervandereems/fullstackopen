@@ -1,42 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import loginService from '../services/login.service';
-import jsonwebtoken from 'jsonwebtoken';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { login } from '../reducers/user.reducer';
+import { setNotification } from '../reducers/notification.reducer';
 
-const Login = ({ sendNotification, setUser }) => {
+const Login = () => {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  useEffect(() => {
-    const localUser = window.localStorage.getItem('user');
-    if (!localUser) {
-      return;
-    }
-    try {
-      const user = JSON.parse(window.localStorage.getItem('user'));
-      setUser(user);
-    } catch (err) {
-      console.error('Error setting user from localStorage', err);
-    }
-  }, [setUser]);
-
   const handleLogin = async (event) => {
     event.preventDefault();
-    try {
-      const user = await loginService.login({
-        username, password,
-      });
-      setUsername('');
-      setPassword('');
-      sendNotification({ txt: `Welkom ${user.name}` });
-      window.localStorage.setItem('user', JSON.stringify({
-        ...user,
-        id: jsonwebtoken.decode(user.token).id
-      }));
-      setUser(user);
-    } catch (exception) {
-      console.error('login problem', exception);
-      sendNotification({ txt: 'Wrong credentials', isError: true });
+    const user = await dispatch(login(username, password));
+    if (user.failed) {
+      dispatch(setNotification({ txt: 'Wrong credentials', isError: true }));
+    } else {
+      dispatch(setNotification({ txt: `Welkom ${user.name}` }));
     }
   };
 
@@ -59,9 +37,5 @@ const Login = ({ sendNotification, setUser }) => {
   );
 };
 
-Login.propTypes = {
-  sendNotification: PropTypes.func.isRequired,
-  setUser: PropTypes.func.isRequired
-};
 
 export default Login;
