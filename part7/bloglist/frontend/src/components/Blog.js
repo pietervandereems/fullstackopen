@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { likeBlog, deleteBlog } from '../reducers/blogs.reducer';
 import { setNotification } from '../reducers/notification.reducer';
 import { useParams, useHistory } from 'react-router-dom';
+import AddComment from './AddComment';
 
 const Blog = () => {
   const dispatch = useDispatch();
@@ -37,6 +38,8 @@ const Blog = () => {
         likes {blog.likes}<button onClick={like}>like</button><br />
         added by {blog.user.name}<br />
         {blog.user.id === user.id ? <button onClick={remove}>remove</button> : null}
+        <h2>comments</h2>
+        <AddComment blog={blog} />
         {blog.comments.length > 0 ?
           <ul>
             {blog.comments.map((comment, index) => <li key={index}>{comment}</li>)}

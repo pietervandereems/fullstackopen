@@ -22,9 +22,15 @@ const updateBlog = async (blog = {}, { token }) => {
   return response.data;
 };
 
-const likeBlog = async (id, { token }) => {
+const likeBlog = async (id, ) => {
   const response = await axios
-    .put(`${baseUrl}/${id}/like`, { headers: { Authorization: `Bearer ${token}` } });
+    .put(`${baseUrl}/${id}/like`);
+  return response.data;
+};
+
+const addComment = async (id, comment) => {
+  const response = await axios
+    .post(`${baseUrl}/${id}/comment`, { comment });
   return response.data;
 };
 
@@ -34,4 +40,4 @@ const deleteBlog = async (blog = {}, { token }) => {
   return response.data;
 };
 
-export default { getAll, addBlog, updateBlog, deleteBlog, likeBlog };
+export default { getAll, addBlog, updateBlog, deleteBlog, likeBlog, addComment };
