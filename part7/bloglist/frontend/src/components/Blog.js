@@ -37,6 +37,11 @@ const Blog = () => {
         likes {blog.likes}<button onClick={like}>like</button><br />
         added by {blog.user.name}<br />
         {blog.user.id === user.id ? <button onClick={remove}>remove</button> : null}
+        {blog.comments.length > 0 ?
+          <ul>
+            {blog.comments.map((comment, index) => <li key={index}>{comment}</li>)}
+          </ul>
+          : null}
       </p>
     </article >
   );
