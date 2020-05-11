@@ -57,6 +57,22 @@ export const updateBlog = (blog) => async (dispatch, getState) => {
   };
 };
 
+export const likeBlog = (blog) => async (dispatch, getState) => {
+  const { user } = getState();
+  const updatedBlog = await blogService.likeBlog(blog.id, user);
+  dispatch({
+    type: 'UPDATE_BLOG',
+    data: {
+      ...updatedBlog,
+      user: blog.user
+    }
+  });
+  return {
+    ...updatedBlog,
+    user: blog.user
+  };
+};
+
 export const initializeBlogs = () => async dispatch => {
   const blogs = await blogService.getAll();
   dispatch({

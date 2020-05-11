@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateBlog, deleteBlog } from '../reducers/blogs.reducer';
+import { likeBlog, deleteBlog } from '../reducers/blogs.reducer';
 import { setNotification } from '../reducers/notification.reducer';
 import { useParams, useHistory } from 'react-router-dom';
 
@@ -17,11 +17,8 @@ const Blog = () => {
 
   const like = async (event) => {
     event.preventDefault();
-    const updatedBlog = await dispatch(updateBlog({
-      ...blog,
-      likes: blog.likes + 1
-    }));
-    dispatch(setNotification({ txt: `liked ${updatedBlog.title}` }));
+    const likedBlog = await dispatch(likeBlog(blog));
+    dispatch(setNotification({ txt: `liked ${likedBlog.title}` }));
   };
 
   const remove = async (event) => {

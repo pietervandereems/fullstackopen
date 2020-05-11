@@ -58,6 +58,13 @@ blogsRouter.put('/:id', async ({ params: { id }, body, token }, response) => {
 
 });
 
+blogsRouter.put('/:id/like', async ({ params: { id } }, response) => {
+  const blog = await Blog.findById(id);
+  blog.likes += 1;
+  const updatedBlog = await Blog.findByIdAndUpdate(id, blog, { new: true });
+  return response.json(updatedBlog.toJSON());
+});
+
 blogsRouter.delete('/:id', async ({ params: { id }, token }, response) => {
   const decodedToken = jwt.verify(token, SECRET);
 

@@ -22,10 +22,16 @@ const updateBlog = async (blog = {}, { token }) => {
   return response.data;
 };
 
+const likeBlog = async (id, { token }) => {
+  const response = await axios
+    .put(`${baseUrl}/${id}/like`, { headers: { Authorization: `Bearer ${token}` } });
+  return response.data;
+};
+
 const deleteBlog = async (blog = {}, { token }) => {
   const response = await axios
     .delete(`${baseUrl}/${blog.id}`, { headers: { Authorization: `Bearer ${token}` } });
   return response.data;
 };
 
-export default { getAll, addBlog, updateBlog, deleteBlog };
+export default { getAll, addBlog, updateBlog, deleteBlog, likeBlog };
