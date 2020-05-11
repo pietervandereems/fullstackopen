@@ -4,6 +4,8 @@ import { likeBlog, deleteBlog } from '../reducers/blogs.reducer';
 import { setNotification } from '../reducers/notification.reducer';
 import { useParams, useHistory } from 'react-router-dom';
 import AddComment from './AddComment';
+import { Button, BlogArticle } from './Styles';
+
 
 const Blog = () => {
   const dispatch = useDispatch();
@@ -31,13 +33,13 @@ const Blog = () => {
   };
 
   return (
-    <article>
+    <BlogArticle>
       <h2>{blog.title} {blog.author}</h2>
       <p>
-        {blog.url}<br />
-        likes {blog.likes}<button onClick={like}>like</button><br />
+        <a href={blog.url}>{blog.url}</a><br />
+        likes {blog.likes}<Button onClick={like}>like</Button><br />
         added by {blog.user.name}<br />
-        {blog.user.id === user.id ? <button onClick={remove}>remove</button> : null}
+        {blog.user.id === user.id ? <Button onClick={remove}>remove</Button> : null}
         <h2>comments</h2>
         <AddComment blog={blog} />
         {blog.comments.length > 0 ?
@@ -46,7 +48,7 @@ const Blog = () => {
           </ul>
           : null}
       </p>
-    </article >
+    </BlogArticle >
   );
 };
 

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../reducers/user.reducer';
 import { setNotification } from '../reducers/notification.reducer';
+import { Button, Input, Form } from './Styles';
+
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -21,18 +23,13 @@ const Login = () => {
   return (
     <>
       <h2>log in to application</h2>
-      <form onSubmit={handleLogin}>
-        <p>
-          <label>username
-            <input type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)} /><br />
-          </label>
-          <label>
-            password
-            <input type="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)} />
-          </label>
-        </p>
-        <button type="submit">login</button>
-      </form>
+      <Form onSubmit={handleLogin}>
+        <label for="Username">username</label>
+        <Input type="text" value={username} name="Username" id="Username" onChange={({ target }) => setUsername(target.value)} />
+        <label for="Password">password</label>
+        <Input type="password" value={password} name="Password" id="Password" onChange={({ target }) => setPassword(target.value)} />
+        <Button type="submit">login</Button>
+      </Form>
     </>
   );
 };

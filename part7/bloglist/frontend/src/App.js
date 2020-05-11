@@ -13,6 +13,8 @@ import {
 } from 'react-router-dom';
 import Users from './components/Users';
 import UserOverview from './components/UserOverview';
+import { Button, Nav } from './components/Styles';
+
 
 const App = () => {
   const dispatch = useDispatch();
@@ -29,25 +31,21 @@ const App = () => {
   };
 
   const padding = { padding: 5 };
-  const navbar = {
-    backgroundColor: 'lightgrey',
-    padding: 2,
-    marginTop: 5,
-    marginBottom: 5
-  };
 
   return (
     <>
-      <nav style={navbar}>
-        <Link style={padding} to="/">blogs</Link>
-        <Link style={padding} to="/users">users</Link>
+      <Nav>
+        <section>
+          <Link style={padding} to="/">blogs</Link>
+          <Link style={padding} to="/users">users</Link>
+        </section>
         {user
-          ? <em>{user.name} logged in <button onClick={handleLogout}>logout</button></em>
+          ? <em>{user.name} logged in <Button onClick={handleLogout}>logout</Button></em>
           : null
         }
-      </nav>
+      </Nav>
       <Notification />
-      <h2>blog app</h2>
+      <h1>blog app</h1>
       {user ?
         <section>
           <Switch>

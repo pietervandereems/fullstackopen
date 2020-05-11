@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { setNotification } from '../reducers/notification.reducer';
 import { addBlog } from '../reducers/blogs.reducer';
 import PropTypes from 'prop-types';
+import { Button, Input, BlogArticle, Form } from './Styles';
 
 const CreateBlogs = ({ toggleVisibility }) => {
   const dispatch = useDispatch();
@@ -18,24 +19,21 @@ const CreateBlogs = ({ toggleVisibility }) => {
   };
 
   return (
-    <>
+    <BlogArticle>
       <h2>create new</h2>
-      <form onSubmit={createBlog}>
-        <label>
-          title
-          <input type="text" name="Title" onChange={handleChange('title')} />
-        </label><br />
-        <label>
-          author
-          <input type="text" name="Author" onChange={handleChange('author')} />
-        </label><br />
-        <label>
-          url
-          <input type="text" name="Url" onChange={handleChange('url')} />
-        </label><br />
-        <button aria-label="submit" type="submit">create</button>
-      </form>
-    </>
+      <Form onSubmit={createBlog}>
+        <label for="Title">title</label>
+        <Input type="text" name="Title" id="Title" onChange={handleChange('title')} />
+
+        <label for="Author">author</label>
+        <Input type="text" name="Author" id="Author" onChange={handleChange('author')} />
+
+        <label for="Url">url</label>
+        <Input type="text" name="Url" id="Url" onChange={handleChange('url')} />
+
+        <Button aria-label="submit" type="submit">create</Button>
+      </Form>
+    </BlogArticle>
   );
 };
 

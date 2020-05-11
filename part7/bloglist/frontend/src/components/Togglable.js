@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Button } from './Styles';
+
 
 
 const Togglable = ({ buttonLabel, children }) => {
@@ -15,11 +17,11 @@ const Togglable = ({ buttonLabel, children }) => {
   return (
     <>
       <section style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{buttonLabel}</button>
+        <Button onClick={toggleVisibility}>{buttonLabel}</Button>
       </section>
       <section style={showWhenVisible}>
         {React.cloneElement(children, { toggleVisibility })}
-        <button onClick={toggleVisibility}>cancel</button>
+        <Button onClick={toggleVisibility}>cancel</Button>
       </section>
     </>
   );

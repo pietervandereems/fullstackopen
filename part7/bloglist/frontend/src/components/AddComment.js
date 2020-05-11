@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { addComment } from '../reducers/blogs.reducer';
 import PropTypes from 'prop-types';
+import { Button, Input } from './Styles';
 
 const AddComment = ({ blog }) => {
   const dispatch = useDispatch();
@@ -16,8 +17,8 @@ const AddComment = ({ blog }) => {
   return (
     <>
       <form onSubmit={createComment}>
-        <input type="text" name="comment" />
-        <button aria-label="submit" type="submit">create</button>
+        <Input type="text" name="comment" />
+        <Button aria-label="submit" type="submit">create</Button>
       </form>
     </>
   );
