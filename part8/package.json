@@ -1,0 +1,23 @@
+{
+  "name": "fullstackopen_exercises_part8",
+  "version": "1.0.0",
+  "description": "Fullstackopen Exercises 8.x",
+  "main": "library-backend.js",
+  "scripts": {
+    "start": "node library-backend.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
+  },
+  "keywords": [
+    "Graphql"
+  ],
+  "author": "Pieter van der Eems",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "apollo-server": "^2.13.1",
+    "graphql": "^15.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.0.0"
+  }
+}
