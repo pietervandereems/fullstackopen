@@ -1,14 +1,15 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const Books = (props) => {
   if (!props.show) {
-    return null
+    return null;
   }
 
-  const books = []
+  const books = [];
 
   return (
-    <div>
+    <>
       <h2>books</h2>
 
       <table>
@@ -31,8 +32,12 @@ const Books = (props) => {
           )}
         </tbody>
       </table>
-    </div>
-  )
-}
+    </>
+  );
+};
 
-export default Books
+Books.propTypes = {
+  show: PropTypes.bool
+};
+
+export default Books;

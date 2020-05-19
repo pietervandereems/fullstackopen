@@ -1,35 +1,36 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const NewBook = (props) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuhtor] = useState('')
-  const [published, setPublished] = useState('')
-  const [genre, setGenre] = useState('')
-  const [genres, setGenres] = useState([])
+  const [title, setTitle] = useState('');
+  const [author, setAuhtor] = useState('');
+  const [published, setPublished] = useState('');
+  const [genre, setGenre] = useState('');
+  const [genres, setGenres] = useState([]);
 
   if (!props.show) {
-    return null
+    return null;
   }
 
   const submit = async (event) => {
-    event.preventDefault()
-    
-    console.log('add book...')
+    event.preventDefault();
 
-    setTitle('')
-    setPublished('')
-    setAuhtor('')
-    setGenres([])
-    setGenre('')
-  }
+    console.log('add book...');
+
+    setTitle('');
+    setPublished('');
+    setAuhtor('');
+    setGenres([]);
+    setGenre('');
+  };
 
   const addGenre = () => {
-    setGenres(genres.concat(genre))
-    setGenre('')
-  }
+    setGenres(genres.concat(genre));
+    setGenre('');
+  };
 
   return (
-    <div>
+    <>
       <form onSubmit={submit}>
         <div>
           title
@@ -65,8 +66,12 @@ const NewBook = (props) => {
         </div>
         <button type='submit'>create book</button>
       </form>
-    </div>
-  )
-}
+    </>
+  );
+};
 
-export default NewBook
+NewBook.propTypes = {
+  show: PropTypes.bool
+};
+
+export default NewBook;

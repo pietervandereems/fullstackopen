@@ -1,14 +1,14 @@
-  
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const Authors = (props) => {
   if (!props.show) {
-    return null
+    return null;
   }
-  const authors = []
+  const authors = [];
 
   return (
-    <div>
+    <>
       <h2>authors</h2>
       <table>
         <tbody>
@@ -30,9 +30,12 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
+    </>
+  );
+};
 
-    </div>
-  )
-}
+Authors.propTypes = {
+  show: PropTypes.bool
+};
 
-export default Authors
+export default Authors;
