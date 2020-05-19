@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { SET_BORN_AUTHOR, ALL_AUTHORS } from '../queries';
+import Select from 'react-select';
 
 const ChangeBorn = () => {
   const [setBornAuthor] = useMutation(SET_BORN_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }]
   });
+  const authorResults = useQuery(ALL_AUTHORS);
   const [name, setName] = useState('');
   const [born, setBorn] = useState('');
+
+  if (authorResults.loading) {
+    return <>Loading...</>;
+  }
+  const authorList = authorResults.data.allAuthors.map(author => ({ value: author.name, label: author.name }));
 
   const submit = async (event) => {
     event.preventDefault();
@@ -24,10 +31,7 @@ const ChangeBorn = () => {
       <form onSubmit={submit}>
         <label>
           name
-          <input
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-          />
+          <Select options={authorList} onChange={({ value }) => setName(value)} isSearchable="true" />
         </label><br />
         <label>
           born
