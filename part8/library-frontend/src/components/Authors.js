@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/client';
 import { ALL_AUTHORS } from '../queries';
 
-const Authors = (props) => {
+const Authors = ({ show }) => {
   const result = useQuery(ALL_AUTHORS);
-  if (!props.show) {
+  if (!show) {
     return null;
   }
 
