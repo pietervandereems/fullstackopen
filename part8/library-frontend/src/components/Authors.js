@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from '@apollo/client';
 import { ALL_AUTHORS } from '../queries';
+import ChangeBorn from './ChangeBorn';
 
 const Authors = ({ show }) => {
   const result = useQuery(ALL_AUTHORS);
@@ -38,6 +39,7 @@ const Authors = ({ show }) => {
           )}
         </tbody>
       </table>
+      <ChangeBorn />
     </>
   );
 };
