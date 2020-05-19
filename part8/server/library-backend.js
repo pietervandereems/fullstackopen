@@ -151,14 +151,13 @@ const resolvers = {
       return book;
     },
     editAuthor: (root, args) => {
-      if (authors.findIndex(author => author.name === args.name) === -1) {
+      const author = authors.find(author => author.name === args.name);
+      if (!author) {
         return null;
       }
-      authors = authors.map(author => author.name === args.name ? { ...author, born: args.setBornTo } : author);
-      return {
-        name: args.name,
-        born: args.setBornTo
-      };
+      const updatedAuthor = { ...author, born: args.setBornTo };
+      authors = authors.map(author => author.name === args.name ? updatedAuthor : author);
+      return updatedAuthor;
     }
   }
 };
