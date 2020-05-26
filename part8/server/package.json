@@ -16,7 +16,9 @@
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "apollo-server": "^2.13.1",
+    "dotenv": "^8.2.0",
     "graphql": "^15.0.0",
+    "mongoose": "^5.9.15",
     "uuid": "^8.0.0"
   },
   "devDependencies": {
