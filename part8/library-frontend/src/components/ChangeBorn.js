@@ -18,7 +18,6 @@ const ChangeBorn = () => {
 
   const submit = async (event) => {
     event.preventDefault();
-
     setBornAuthor({ variables: { name, setBornTo: parseInt(born, 10) } });
 
     setName('');
@@ -31,7 +30,7 @@ const ChangeBorn = () => {
       <form onSubmit={submit}>
         <label>
           name
-          <Select options={authorList} onChange={({ value }) => setName(value)} isSearchable="true" />
+          <Select options={authorList} value={{ value: name, label: name }} onChange={({ value }) => setName(value)} isSearchable="true" />
         </label><br />
         <label>
           born
