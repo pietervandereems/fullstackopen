@@ -54,7 +54,8 @@ const NewBook = ({ show }) => {
         </label><br />
         <label>
           author
-          <Select options={authorList} onChange={({ value }) => setAuthor(value)} isSearchable="true" />
+          <input value={author} onChange={({ target }) => setAuthor(target.value)} />
+          {/* <Select options={authorList} onChange={({ value }) => setAuthor(value)} isSearchable="true" /> */}
         </label><br />
         <label>
           published

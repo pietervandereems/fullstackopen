@@ -21,18 +21,36 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args) => {
-      const book = new Book({ ...args });
+      let author;
+      const foundAuthors = await Author.find({ name: args.author });
+      if (foundAuthors.length === 0) {
+        try {
+          author = new Author({ name: args.author });
+          await author.save();
+        } catch (err) {
+          throw new UserInputError(err.message, { invalidArgs: args });
+        }
+      } else {
+        author = foundAuthors[0];
+      }
+
+      const book = new Book({ ...args, author: author._id });
       try {
         await book.save();
       } catch (err) {
-        throw new UserInputError(err.message, {
-          invalidArgs: args,
-        });
+        throw new UserInputError(err.message, { invalidArgs: args });
       }
+
       return Book.findById(book._id).populate('author');
     },
-    editAuthor: (root, args) => {
-      return Author.findOneAndUpdate({ name: args.name }, { born: args.setBornTo });
+    editAuthor: async (root, args) => {
+      let author;
+      try {
+        author = await Author.findOneAndUpdate({ name: args.name }, { born: args.setBornTo });
+      } catch (err) {
+        throw new UserInputError(err.message, { invalidArgs: args });
+      }
+      return author;
     }
   }
 };
