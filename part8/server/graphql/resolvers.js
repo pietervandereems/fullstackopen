@@ -1,26 +1,54 @@
-let { authors } = require('../data');
+const config = require('../utils/config');
 const Book = require('../models/book.model');
 const Author = require('../models/author.model');
-const { UserInputError } = require('apollo-server');
+const User = require('../models/user.model');
+const { UserInputError, AuthenticationError } = require('apollo-server');
+const jwt = require('jsonwebtoken');
 
 const resolvers = {
   Query: {
     bookCount: () => Book.collection.countDocuments(),
-    authorCount: () => authors.length,
-    allBooks: (/*root, args*/) =>
-      // books.filter(book =>
-      //   args.author ? book.author === args.author : true
-      // ).filter(book =>
-      //   args.genre ? book.genres.includes(args.genre) : true
-      // ),
+    authorCount: () => Author.collection.countDocuments(),
+    allBooks: () =>
       Book.find({}).populate('author'),
-    allAuthors: () => Author.find({})
+    allAuthors: () => Author.find({}),
+    me: (root, args, context) => {
+      return context.currentUser;
+    },
   },
   Author: {
     bookCount: root => Book.countDocuments({ author: root._id })
   },
   Mutation: {
-    addBook: async (root, args) => {
+    login: async (root, args) => {
+      const user = await User.findOne({ username: args.username });
+
+      if (!user || args.password !== 'secreet') {
+        throw new UserInputError('wrong credentials');
+      }
+
+      const userForToken = {
+        username: user.username,
+        id: user._id,
+      };
+
+      return { value: jwt.sign(userForToken, config.JWT_SECRET) };
+    },
+    createUser: (root, args) => {
+      const user = new User({ username: args.username });
+
+      return user.save()
+        .catch(err => {
+          throw new UserInputError(err.message, { invalidArgs: args, });
+        });
+    },
+    addBook: async (root, args, context) => {
+      const currentUser = context.currentUser;
+
+      if (!currentUser) {
+        throw new AuthenticationError('not authenticated');
+      }
+
       let author;
       const foundAuthors = await Author.find({ name: args.author });
       if (foundAuthors.length === 0) {
@@ -43,14 +71,17 @@ const resolvers = {
 
       return Book.findById(book._id).populate('author');
     },
-    editAuthor: async (root, args) => {
-      let author;
-      try {
-        author = await Author.findOneAndUpdate({ name: args.name }, { born: args.setBornTo });
-      } catch (err) {
-        throw new UserInputError(err.message, { invalidArgs: args });
+    editAuthor: async (root, args, context) => {
+      const currentUser = context.currentUser;
+
+      if (!currentUser) {
+        throw new AuthenticationError('not authenticated');
       }
-      return author;
+
+      return Author.findOneAndUpdate({ name: args.name }, { born: args.setBornTo })
+        .catch(err => {
+          throw new UserInputError(err.message, { invalidArgs: args });
+        });
     }
   }
 };
