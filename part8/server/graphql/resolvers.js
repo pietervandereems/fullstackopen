@@ -1,6 +1,7 @@
 let { authors } = require('../data');
 const Book = require('../models/book.model');
 const Author = require('../models/author.model');
+const { UserInputError } = require('apollo-server');
 
 const resolvers = {
   Query: {
@@ -19,24 +20,19 @@ const resolvers = {
     bookCount: root => Book.countDocuments({ author: root._id })
   },
   Mutation: {
-    addBook: (root, args) => {
-      console.log('Mutation addBook', { root, args });
+    addBook: async (root, args) => {
       const book = new Book({ ...args });
-      return book.save()
-        .then(book => Book.findById(book._id).populate('author'));
+      try {
+        await book.save();
+      } catch (err) {
+        throw new UserInputError(err.message, {
+          invalidArgs: args,
+        });
+      }
+      return Book.findById(book._id).populate('author');
     },
     editAuthor: (root, args) => {
-      console.log('resolvers.js Mutation editAuthor', { root, args });
       return Author.findOneAndUpdate({ name: args.name }, { born: args.setBornTo });
-
-
-      // const author = authors.find(author => author.name === args.name);
-      // if (!author) {
-      //   return null;
-      // }
-      // const updatedAuthor = { ...author, born: args.setBornTo };
-      // authors = authors.map(author => author.name === args.name ? updatedAuthor : author);
-      // return updatedAuthor;
     }
   }
 };
