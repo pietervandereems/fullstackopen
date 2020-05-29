@@ -1,25 +1,17 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { ADD_BOOK, ALL_BOOKS, ALL_AUTHORS } from '../queries';
-import Select from 'react-select';
 
 const NewBook = ({ show }) => {
   const [addBook] = useMutation(ADD_BOOK, {
     refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }]
   });
-  const authorResults = useQuery(ALL_AUTHORS);
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [published, setPublished] = useState('');
   const [genre, setGenre] = useState('');
   const [genres, setGenres] = useState([]);
-
-  if (authorResults.loading) {
-    return <>Loading...</>;
-  }
-  const authorList = authorResults.data.allAuthors.map(author => ({ value: author.id, label: author.name }));
-
 
   if (!show) {
     return null;
@@ -55,7 +47,6 @@ const NewBook = ({ show }) => {
         <label>
           author
           <input value={author} onChange={({ target }) => setAuthor(target.value)} />
-          {/* <Select options={authorList} onChange={({ value }) => setAuthor(value)} isSearchable="true" /> */}
         </label><br />
         <label>
           published
