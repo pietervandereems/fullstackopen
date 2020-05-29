@@ -4,8 +4,9 @@ import { useQuery } from '@apollo/client';
 import { ALL_AUTHORS } from '../queries';
 import ChangeBorn from './ChangeBorn';
 
-const Authors = ({ show }) => {
+const Authors = ({ show, setError }) => {
   const result = useQuery(ALL_AUTHORS);
+  const localToken = localStorage.getItem('user-token');
   if (!show) {
     return null;
   }
@@ -39,13 +40,17 @@ const Authors = ({ show }) => {
           )}
         </tbody>
       </table>
-      <ChangeBorn />
+      {localToken ?
+        <ChangeBorn setError={setError} /> :
+        null
+      }
     </>
   );
 };
 
 Authors.propTypes = {
-  show: PropTypes.bool
+  show: PropTypes.bool,
+  setError: PropTypes.func
 };
 
 export default Authors;

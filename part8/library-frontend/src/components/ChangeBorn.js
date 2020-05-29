@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { SET_BORN_AUTHOR, ALL_AUTHORS } from '../queries';
 import Select from 'react-select';
+import PropTypes from 'prop-types';
 
-const ChangeBorn = () => {
+const ChangeBorn = ({ setError }) => {
   const [setBornAuthor] = useMutation(SET_BORN_AUTHOR, {
-    refetchQueries: [{ query: ALL_AUTHORS }]
+    refetchQueries: [{ query: ALL_AUTHORS }],
+    onError: (error) => { setError(error.graphQLErrors[0].message); }
   });
   const authorResults = useQuery(ALL_AUTHORS);
   const [name, setName] = useState('');
@@ -19,7 +21,6 @@ const ChangeBorn = () => {
   const submit = async (event) => {
     event.preventDefault();
     setBornAuthor({ variables: { name, setBornTo: parseInt(born, 10) } });
-
     setName('');
     setBorn('');
   };
@@ -44,6 +45,10 @@ const ChangeBorn = () => {
       </form>
     </section>
   );
+};
+
+ChangeBorn.propTypes = {
+  setError: PropTypes.func
 };
 
 export default ChangeBorn;

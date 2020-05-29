@@ -2,7 +2,7 @@ require('dotenv').config();
 const logger = require('./logger');
 
 let MONGODB_URI = process.env.MONGODB_URI;
-const SECRET = process.env.SECRET;
+const JWT_SECRET = process.env.JWT_SECRET;
 let TESTINGMODE = false;
 
 if (process.env.NODE_ENV === 'test') {
@@ -13,6 +13,6 @@ if (process.env.NODE_ENV === 'test') {
 
 module.exports = {
   MONGODB_URI,
-  SECRET,
+  JWT_SECRET,
   TESTINGMODE
 };
