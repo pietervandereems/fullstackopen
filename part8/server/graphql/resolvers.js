@@ -37,9 +37,9 @@ const resolvers = {
         username: user.username,
         id: user._id,
       };
-      console.log('resolvers.js, Mutation, login', { userForToken, JWT_SECRET: config.JWT_SECRET });
+      const token = jwt.sign(userForToken, config.JWT_SECRET);
 
-      return { value: jwt.sign(userForToken, config.JWT_SECRET) };
+      return { token, user };
     },
     createUser: (root, args) => {
       const user = new User({ username: args.username });
