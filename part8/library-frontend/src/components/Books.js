@@ -7,7 +7,9 @@ import ListBooks from './ListBooks';
 
 const Books = ({ show }) => {
   const [genre, setGenre] = useState('all genres');
-  const [getBook, { loading, data }] = useLazyQuery(GENRE_BOOKS);
+  const [getBook, { loading, data }] = useLazyQuery(GENRE_BOOKS, {
+    fetchPolicy: 'network-only'
+  });
 
   useEffect(() => {
     const genreRequest = (genre === 'all genres') ? '*' : genre;
