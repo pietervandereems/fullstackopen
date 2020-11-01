@@ -15,6 +15,12 @@ const resolvers = {
     me: (root, args, context) => {
       return context.currentUser;
     },
+    genreBooks: (root, args) => {
+      if (args.genre === '*') {
+        return Book.find({}).populate('author');
+      }
+      return Book.find({ genres: { $in: args.genre } }).populate('author');
+    }
   },
   Author: {
     bookCount: root => Book.countDocuments({ author: root._id })
