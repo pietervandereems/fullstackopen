@@ -27,6 +27,20 @@ query {
       name
     }
     published
+    genres
+  }
+}
+`;
+
+export const GENRE_BOOKS = gql`
+query genre($genre: String!) {
+  genreBooks(genre: $genre) {
+    title
+    author {
+      name
+    }
+    published
+    genres
   }
 }
 `;

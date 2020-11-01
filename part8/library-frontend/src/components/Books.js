@@ -1,24 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useQuery } from '@apollo/client';
-import { ALL_BOOKS } from '../queries';
+import { useLazyQuery } from '@apollo/client';
+import { GENRE_BOOKS } from '../queries';
+import Genre from './Genre';
 
 const Books = ({ show }) => {
-  const result = useQuery(ALL_BOOKS);
+  const [genre, setGenre] = useState('all genres');
+  const [getBook, { loading, data }] = useLazyQuery(GENRE_BOOKS);
+
+  useEffect(() => {
+    const genreRequest = (genre === 'all genres') ? '*' : genre;
+    return getBook({ variables: { genre: genreRequest } });
+  }, [genre, getBook]);
+
   if (!show) {
     return null;
   }
 
-  if (result.loading) {
+  if (loading) {
     return <>loading...</>;
   }
 
-  const books = result.data.allBooks;
+  const books = data.genreBooks;
 
   return (
     <>
       <h2>books</h2>
-
+      <p>in genre <strong>{genre}</strong></p>
       <table>
         <tbody>
           <tr>
@@ -39,6 +47,7 @@ const Books = ({ show }) => {
           )}
         </tbody>
       </table>
+      <Genre setGenre={setGenre}></Genre>
     </>
   );
 };
