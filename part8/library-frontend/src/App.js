@@ -4,6 +4,7 @@ import Books from './components/Books';
 import NewBook from './components/NewBook';
 import Login from './components/Login';
 import PropTypes from 'prop-types';
+import Recommendations from './components/Recommendations';
 
 const Notify = ({ errorMessage }) => {
   if (!errorMessage) {
@@ -21,6 +22,7 @@ const App = () => {
   const [page, setPage] = useState('authors');
   const [token, setToken] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const localToken = localStorage.getItem('user-token');
@@ -52,6 +54,10 @@ const App = () => {
           <button onClick={() => setPage('add')}>add book</button> :
           null
         }
+        {token ?
+          <button onClick={() => setPage('recommendations')}>recommend</button> :
+          null
+        }
         <button onClick={toggleLogin}>{token ? 'logout' : 'login'}</button>
       </nav>
 
@@ -59,15 +65,13 @@ const App = () => {
 
       <Authors show={page === 'authors'} setError={notifyOfError} />
 
-      <Books
-        show={page === 'books'}
-      />
+      <Books show={page === 'books'} />
 
-      <NewBook
-        show={page === 'add'}
-      />
+      <NewBook show={page === 'add'} />
 
-      <Login show={page === 'login'} setToken={setToken} setError={notifyOfError} />
+      <Recommendations show={page === 'recommendations'} favorite={(user) ? user.favoriteGenre : ''} />
+
+      <Login show={page === 'login'} setToken={setToken} setError={notifyOfError} setUser={setUser} />
     </>
   );
 };

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useLazyQuery } from '@apollo/client';
 import { GENRE_BOOKS } from '../queries';
 import Genre from './Genre';
+import ListBooks from './ListBooks';
 
 const Books = ({ show }) => {
   const [genre, setGenre] = useState('all genres');
@@ -27,27 +28,8 @@ const Books = ({ show }) => {
     <>
       <h2>books</h2>
       <p>in genre <strong>{genre}</strong></p>
-      <table>
-        <tbody>
-          <tr>
-            <th></th>
-            <th>
-              author
-            </th>
-            <th>
-              published
-            </th>
-          </tr>
-          {books.map(a =>
-            <tr key={a.title}>
-              <td>{a.title}</td>
-              <td>{a.author.name}</td>
-              <td>{a.published}</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-      <Genre setGenre={setGenre}></Genre>
+      <ListBooks books={books} />
+      <Genre setGenre={setGenre} />
     </>
   );
 };

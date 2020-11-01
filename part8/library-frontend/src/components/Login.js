@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useMutation, useApolloClient } from '@apollo/client';
 import { LOGIN } from '../queries';
 
-const Login = ({ show, setToken, setError }) => {
+const Login = ({ show, setToken, setError, setUser }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const client = useApolloClient();
@@ -16,12 +16,13 @@ const Login = ({ show, setToken, setError }) => {
 
   useEffect(() => {
     if (result.data) {
-      const token = result.data.login.value;
+      const token = result.data.login.token;
       localStorage.setItem('user-token', token);
       client.resetStore();
       setToken(token);
+      setUser(result.data.login.user);
     }
-  }, [result.data, setToken, client]);
+  }, [result.data, setToken, client, setUser]);
 
   if (!show) {
     return null;
@@ -31,6 +32,7 @@ const Login = ({ show, setToken, setError }) => {
     event.preventDefault();
 
     login({ variables: { username, password } });
+
     setUsername('');
     setPassword('');
   };
@@ -54,7 +56,8 @@ const Login = ({ show, setToken, setError }) => {
 Login.propTypes = {
   show: PropTypes.bool,
   setToken: PropTypes.func,
-  setError: PropTypes.func
+  setError: PropTypes.func,
+  setUser: PropTypes.func
 };
 
 export default Login;
