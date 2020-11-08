@@ -2,8 +2,9 @@ const config = require('../utils/config');
 const Book = require('../models/book.model');
 const Author = require('../models/author.model');
 const User = require('../models/user.model');
-const { UserInputError, AuthenticationError } = require('apollo-server');
+const { UserInputError, AuthenticationError, PubSub } = require('apollo-server');
 const jwt = require('jsonwebtoken');
+const pubsub = new PubSub();
 
 const resolvers = {
   Query: {
@@ -76,7 +77,11 @@ const resolvers = {
         throw new UserInputError(err.message, { invalidArgs: args });
       }
 
-      return Book.findById(book._id).populate('author');
+      const fullBook = Book.findById(book._id).populate('author');
+
+      pubsub.publish('BOOK_ADDED', { bookAdded: fullBook });
+
+      return fullBook;
     },
     editAuthor: async (root, args, context) => {
       const currentUser = context.currentUser;
@@ -89,6 +94,11 @@ const resolvers = {
         .catch(err => {
           throw new UserInputError(err.message, { invalidArgs: args });
         });
+    }
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
     }
   }
 };

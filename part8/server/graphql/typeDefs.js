@@ -58,6 +58,10 @@ const typeDefs = gql`
       password: String!
     ): UserLogin
   }
+
+  type Subscription {
+    bookAdded: Book!
+  }
 `;
 
 module.exports = typeDefs;
