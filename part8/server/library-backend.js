@@ -33,6 +33,7 @@ const server = new ApolloServer({
   }
 });
 
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl }) => {
   logger.info(`Server ready at ${url}`);
+  logger.info(`Subscriptions ready at ${subscriptionsUrl}`);
 });

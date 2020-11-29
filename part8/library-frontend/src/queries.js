@@ -31,43 +31,45 @@ query {
 }
 `;
 
+export const BOOK_DETAILS = gql`
+fragment BookDetails on Book {
+  title
+  author {
+    name
+  }
+  published
+  genres
+}
+`;
+
 export const ALL_BOOKS = gql`
 query {
   allBooks {
-    title
-    author {
-      name
-    }
-    published
-    genres
+    ...BookDetails
   }
 }
+
+${BOOK_DETAILS}
 `;
+
+
 
 export const GENRE_BOOKS = gql`
 query genre($genre: String!) {
   genreBooks(genre: $genre) {
-    title
-    author {
-      name
-    }
-    published
-    genres
+    ...BookDetails
   }
 }
+${BOOK_DETAILS}
 `;
 
 export const ADD_BOOK = gql`
 mutation addBook($title: String!, $author: String!, $published: Int!, $genres: [Genre!]) {
   addBook(title: $title, author: $author, published: $published, genres: $genres) {
-    title
-    author {
-      name
-    }
-    published
-    genres
+    ...BookDetails
   }
 }
+${BOOK_DETAILS}
 `;
 
 export const SET_BORN_AUTHOR = gql`
@@ -77,4 +79,13 @@ mutation setBornAuthor($name: String!, $setBornTo: Int!) {
     born
     id
   }
-}`;
+} `;
+
+export const BOOK_ADDED = gql`
+subscription {
+  bookAdded {
+      ...BookDetails
+  }
+}
+${BOOK_DETAILS}
+`;

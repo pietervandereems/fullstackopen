@@ -5,6 +5,8 @@ import NewBook from './components/NewBook';
 import Login from './components/Login';
 import PropTypes from 'prop-types';
 import Recommendations from './components/Recommendations';
+import { useSubscription } from '@apollo/client';
+import { BOOK_ADDED } from './queries';
 
 const Notify = ({ errorMessage }) => {
   if (!errorMessage) {
@@ -23,6 +25,12 @@ const App = () => {
   const [token, setToken] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [user, setUser] = useState(null);
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData: { data: { bookAdded } } }) => {
+      window.alert(`${bookAdded.title} from ${bookAdded.author.name} was added as a new book`);
+    }
+  });
 
   useEffect(() => {
     const localToken = localStorage.getItem('user-token');
