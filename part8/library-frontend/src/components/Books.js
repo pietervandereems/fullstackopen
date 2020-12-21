@@ -11,7 +11,6 @@ const Books = ({ show }) => {
   const [getBook, { loading, data }] = useLazyQuery(GENRE_BOOKS, {
     fetchPolicy: 'cache-first'
   });
-  // const allBooks = useQuery(ALL_BOOKS);
   const client = useApolloClient();
 
   useEffect(() => {
