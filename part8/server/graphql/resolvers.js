@@ -4,6 +4,7 @@ const Author = require('../models/author.model');
 const User = require('../models/user.model');
 const { UserInputError, AuthenticationError, PubSub } = require('apollo-server');
 const jwt = require('jsonwebtoken');
+
 const pubsub = new PubSub();
 
 const resolvers = {
@@ -22,9 +23,6 @@ const resolvers = {
       }
       return Book.find({ genres: { $in: args.genre } }).populate('author');
     }
-  },
-  Author: {
-    bookCount: root => Book.countDocuments({ author: root._id })
   },
   Mutation: {
     login: async (root, args) => {
@@ -61,13 +59,15 @@ const resolvers = {
       const foundAuthors = await Author.find({ name: args.author });
       if (foundAuthors.length === 0) {
         try {
-          author = new Author({ name: args.author });
+          author = new Author({ name: args.author, bookCount: 1 });
           await author.save();
         } catch (err) {
           throw new UserInputError(err.message, { invalidArgs: args });
         }
       } else {
         author = foundAuthors[0];
+        const authorInfo = await Author.findById(author._id).exec();
+        await Author.findByIdAndUpdate(author._id, { bookCount: (authorInfo.bookCount || 0) + 1 });
       }
 
       const book = new Book({ ...args, author: author._id });
