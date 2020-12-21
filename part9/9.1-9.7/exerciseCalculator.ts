@@ -8,7 +8,35 @@ interface ExerciseResult {
   average: number
 };
 
-const calculateExercises = (exerciseTimes: number[], target: number): ExerciseResult => {
+interface ExerciseArguments {
+  target: number,
+  exerciseTimes: number[]
+}
+
+const parseArguments = (args: string[]): ExerciseArguments => {
+  if (args.length < 4) throw new Error('Not enough arguments');
+
+  const target = parseFloat(args[2]);
+  if (isNaN(target)) {
+    throw new Error('Provided target is not a number');
+  }
+
+  const exerciseTimes = args.slice(3).map((time: string) => {
+    const numericalTime = parseFloat(time);
+    if (isNaN(numericalTime)) {
+      throw new Error(`Provided time ${time} is not a number`);
+    }
+    return numericalTime;
+  });
+
+  return {
+    target,
+    exerciseTimes
+  };
+};
+
+
+const calculateExercises = ({ exerciseTimes, target }: ExerciseArguments): ExerciseResult => {
   const totalTime = exerciseTimes.reduce((acc: number, duration: number) => acc + duration, 0);
   const periodLength = exerciseTimes.length;
   const average = totalTime / periodLength;
@@ -37,4 +65,4 @@ const calculateExercises = (exerciseTimes: number[], target: number): ExerciseRe
   }
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+console.log(calculateExercises(parseArguments(process.argv)));
