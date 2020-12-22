@@ -4,10 +4,7 @@ import { interpretBmi, parseBmiParams, calculateBmi } from '../libraries/bmiCalc
 const bmiRouter = express.Router();
 
 bmiRouter.get('/', ({ query }: Request, res: Response) => {
-  const unneededHeight = <string>query.height;
-  const unneededWeight = <string>query.weight;
-
-  const { height, weight } = parseBmiParams(unneededHeight, unneededWeight);
+  const { height, weight } = parseBmiParams(query);
   const bmi = interpretBmi(calculateBmi({ height, weight }));
 
   res.status(200).send({

@@ -1,11 +1,8 @@
 import { createError } from '../utils/errorHandler';
+import { BmiArguments } from '../models/bmi.model';
 
-interface BmiArguments {
-  height: number;
-  weight: number;
-}
-
-const parseBmiParams = (height: string , weight: string): BmiArguments => { // any used here because query is of type Response.ParsedQs
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+const parseBmiParams = ({ height, weight }: any): BmiArguments => { // any used here because query is of type ParsedQs
   const hInt = parseInt(height, 10);
   const wInt = parseInt(weight, 10);
 
