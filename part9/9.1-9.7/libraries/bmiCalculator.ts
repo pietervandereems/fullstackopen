@@ -5,7 +5,7 @@ interface BmiArguments {
   weight: number;
 }
 
-const parseBmiParams = ({ height, weight }: any): BmiArguments => {
+const parseBmiParams = (height: string , weight: string): BmiArguments => { // any used here because query is of type Response.ParsedQs
   const hInt = parseInt(height, 10);
   const wInt = parseInt(weight, 10);
 
@@ -54,4 +54,4 @@ export {
   parseBmiParams,
   calculateBmi,
   interpretBmi
-}
+};

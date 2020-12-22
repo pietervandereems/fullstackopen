@@ -1,8 +1,7 @@
 interface BmiArguments {
   height: number,
   weight: number
-};
-
+}
 
 const parseArgs = (args: string[]): BmiArguments => {
   if (args.length !== 4) throw new Error('2 arguments expected');

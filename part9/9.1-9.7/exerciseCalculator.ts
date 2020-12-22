@@ -6,7 +6,7 @@ interface ExerciseResult {
   ratingDescription: string,
   target: number,
   average: number
-};
+}
 
 interface ExerciseArguments {
   target: number,
@@ -62,7 +62,7 @@ const calculateExercises = ({ exerciseTimes, target }: ExerciseArguments): Exerc
     ratingDescription,
     target,
     average
-  }
+  };
 };
 
 console.log(calculateExercises(parseArguments(process.argv)));

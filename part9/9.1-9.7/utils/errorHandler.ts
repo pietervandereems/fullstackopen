@@ -1,20 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
-import logger from './logger';
 
-// interface HandlerError extends Error {
-//   name: string;
-//   message: string;
-// };
-
-const createError = ({ name, message }: Error) => {
+const createError = ({ name, message }: Error): Error => {
   const err = new Error();
   err.name = name;
   err.message = message;
   return err;
-}
+};
 
-const errorHandler = (err: Error, _req: Request, res: Response, next: NextFunction) => {
-  logger.error('errorHandler', err);
+const errorHandler = (err: Error, _req: Request, res: Response, next: NextFunction): Response<void> | void => {
+  console.error('errorHandler', err);
 
   switch (err.name) {
     case 'ParamError':
@@ -35,4 +29,4 @@ const errorHandler = (err: Error, _req: Request, res: Response, next: NextFuncti
 export {
   createError,
   errorHandler
-}
+};
