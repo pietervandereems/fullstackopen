@@ -3,10 +3,10 @@ import { pingRouter } from './controllers/ping.controller';
 const app = express();
 app.use(express.json());
 
-const PORT = 3000;
+const PORT = 3001;
 
-app.use('/ping', pingRouter);
+app.use('/api/ping', pingRouter);
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}\nMake sure to have proxy to port ${PORT} configured in the patientor frontend`);
 });
