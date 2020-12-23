@@ -25,9 +25,9 @@ const parseExercisesParams = ({ daily_exercises, target }: ExercisesRequest): Ex
     throw mallformattedError();
   }
 
-  const fuckyoutypescript = [...daily_exercises];
+  const yesTypescriptThisIsAnArray = [...daily_exercises];
 
-  const exerciseTimes = fuckyoutypescript.map((time: number | string) => {
+  const exerciseTimes = yesTypescriptThisIsAnArray.map((time: number | string) => {
     const numericalTime = toNumber(time);
     if (isNaN(numericalTime)) {
       throw mallformattedError();
