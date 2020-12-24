@@ -7,6 +7,10 @@ patientsRouter.get('/', (_req: Request, res: Response) => {
   res.send(patientsService.getEntries());
 });
 
+patientsRouter.post('/', (req: Request, res: Response) => {
+  res.send(patientsService.addPatient(req.body));
+});
+
 export {
   patientsRouter
 };

@@ -1,16 +1,26 @@
 import data from '../../data/patients.json';
-import { NonSSNPatient } from '../types/patients.types';
+import { NonSSNPatient, Patient } from '../types/patients.types';
 
-const getEntries = (): NonSSNPatient[] => {
-  return data.map(({ id, name, dateOfBirth, gender, occupation }) => ({
+const removeSSN = ({ id, name, dateOfBirth, gender, occupation }: Patient): NonSSNPatient => {
+  return {
     id,
     name,
     dateOfBirth,
     gender,
     occupation
-  }));
+  };
+};
+
+const getEntries = (): NonSSNPatient[] => {
+  return data.map(removeSSN);
+};
+
+const addPatient = (patient: Patient): NonSSNPatient => {
+  data.push(patient);
+  return removeSSN(patient);
 };
 
 export default {
-  getEntries
+  getEntries,
+  addPatient
 };
