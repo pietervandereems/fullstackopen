@@ -27,9 +27,7 @@ const findPatientById = (id: string): Patient | undefined => {
 };
 
 const addPatient = (newPatient: NewPatient): PublicPatient => {
-  /* eslint-disable-next-line @typescript-eslint/no-unsafe-call */
   const patient: Patient = {
-    /* eslint-disable-next-line @typescript-eslint/no-unsafe-call */
     id: uuidv4(),
     ...toNewPatientEntry(newPatient)
   };
