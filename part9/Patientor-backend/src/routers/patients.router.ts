@@ -3,8 +3,13 @@ import patientsService from '../services/patients.service';
 
 const patientsRouter = express.Router();
 
+patientsRouter.get('/:id', (req: Request, res: Response) => {
+  const id = req.params.id;
+  res.send(patientsService.findPatientById(id));
+});
+
 patientsRouter.get('/', (_req: Request, res: Response) => {
-  res.send(patientsService.getEntries());
+  res.send(patientsService.getPatients());
 });
 
 patientsRouter.post('/', (req: Request, res: Response) => {

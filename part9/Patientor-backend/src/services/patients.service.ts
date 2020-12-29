@@ -1,36 +1,45 @@
 import data from '../../data/patients.json';
-import { NewPatient, NonSSNPatient, Patient } from '../types/patients.types';
+import { NewPatient, PublicPatient, Patient } from '../types/patients.types';
 import { v4 as uuidv4 } from 'uuid';
 import { toNewPatientEntry } from '../utils';
 
-const removeSSN = (patient: Patient): NonSSNPatient => {
-  return {
-    id: patient.id,
-    name: patient.name,
-    dateOfBirth: patient.dateOfBirth,
-    gender: patient.gender,
-    occupation: patient.occupation
-  };
-};
+const toPublicPatient = (patient: Patient): PublicPatient => ({
+  id: patient.id,
+  name: patient.name,
+  dateOfBirth: patient.dateOfBirth,
+  gender: patient.gender,
+  occupation: patient.occupation
+});
 
-const getEntries = (): NonSSNPatient[] => {
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  return data.map((patient: any) => removeSSN(patient as Patient));
+const defaultEntries = (patient: Patient): Patient => ({
+  ...patient,
+  entries: patient.entries ?? []
+});
+
+const getPatients = (): PublicPatient[] => {
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  return data.map((patient: any) => toPublicPatient(patient as Patient));
 };
 
-const addPatient = (newPatient: NewPatient): NonSSNPatient => {
+const findPatientById = (id: string): Patient | undefined => {
+  return (defaultEntries(data.find((patient) => patient.id === id) as Patient));
+};
+
+const addPatient = (newPatient: NewPatient): PublicPatient => {
   /* eslint-disable-next-line @typescript-eslint/no-unsafe-call */
   const patient: Patient = {
     /* eslint-disable-next-line @typescript-eslint/no-unsafe-call */
-    id: uuidv4() as string,
+    id: uuidv4(),
     ...toNewPatientEntry(newPatient)
   };
 
   data.push(patient);
-  return removeSSN(patient);
+  return toPublicPatient(patient);
 };
 
 export default {
-  getEntries,
+  getPatients,
+  findPatientById,
   addPatient
 };
